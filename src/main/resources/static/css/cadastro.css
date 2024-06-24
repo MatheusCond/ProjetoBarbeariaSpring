@@ -1,0 +1,400 @@
+header{
+    background: url("../imgs/bg.jpg");
+    padding: 20px 0px; /*espaço ao redor do elemento dentro das bordas*/
+    transition: 0.5s; /*A propriedade abreviada combina quatro das propriedades de transição em uma única propriedade.*/
+}
+
+#box{
+    position: relative;/*posição de referência do ponto inicial dentro do box*/
+    width: 960px;
+    margin: 0 auto;
+}
+
+#box h1 img{
+    width: 15em;
+}
+
+body{
+    font-family: 'Open Sans', sans-serif; /*Texto da fonte*/
+}
+
+
+nav ul{
+    position: absolute; /*posição de referência do ponto inicial com página inteira*/
+    top: 110px; /*distância do topo*/
+    right: 0px;
+}
+
+nav li{
+    display: inline; /*é usada para exibir um elemento em linha com o conteúdo que o rodeia.*/
+    margin: 0 0 0 15px; /*espaço externo*/
+
+}
+
+nav a:hover{ /*mudar o comportamento quando o mouse estiver acima*/
+    color: #990011;
+    text-decoration: underline;
+}
+
+nav a{
+    text-transform: uppercase;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;/*text-decoration: none; é uma declaração CSS que é usada para remover a decoração de texto de um elemento.*/
+    font-size: 22px;
+}
+
+#banner{
+    width: 100%;
+    display: block;
+    margin: auto;
+}
+
+main{
+    background: #FEFEFE;
+}
+
+.main{
+    margin: 30px 2em;
+
+}
+
+.title_main{
+    text-align: center;
+    font-size: 2em;
+    clear: left; /*clear: left; é uma declaração CSS que é usada para impedir que um elemento flutue à esquerda em relação ao conteúdo que o rodeia.*/
+    margin: 15px 0;
+
+}
+
+#cut{ /*Imagem de corte a esquerda da pagina*/
+    width: 180px;
+    float: left;/*float: left; é uma declaração CSS que é usada para fazer com que um elemento flutue à esquerda em relação ao conteúdo que o rodeia.*/
+    margin: 0 10px 0px 0px;/*superior direito inferior esquerdo*/
+}
+
+.main p{
+    margin: 1em 0;
+}
+
+.main strong{
+    font-weight: bolder;
+}
+
+.local{
+    background: linear-gradient(#FEFEFE,#666666)
+}
+
+.local{
+    text-align: center;
+    margin: 2em 0 10px 0;
+    font-size: 2em;
+}
+
+.local>{
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 2px #777777;
+}
+
+.map{
+    margin: 30px 30px 0 30px;
+}
+
+.products{
+    width: 960px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.products li{
+    display: inline-block;
+    text-align: center;
+    width: 30%;
+    vertical-align: top;
+    margin: 0 1.5%;
+    padding: 30px 20px;
+    box-sizing: border-box;/* As propriedades width (width) e height (height) incluem o tamanho do preenchimento e o limite da propriedade */ /*não para aumentar o tamanho do elemento*/
+    border: 2px solid #000000;/*tamanho/estilo/cor*/
+    border-radius: 10px; /* curvatura */
+}
+
+.products li:hover{/*mudar o comportamento quando o mouse acabar*/
+    border-color: #990011;
+}
+
+.products li:active{ /*mudar o comportamento quando o mouse clicar*/
+    border-color: #339900;
+}
+
+h2{
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.products li > img{
+    width: 10em;
+}
+
+.products li:hover h2{
+    font-size: 35px;
+}
+
+.product-description{
+    font-size: 20px;
+
+}
+
+.product-price{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+#four{
+    width: 100px;
+    float: left;
+    margin: 15px 30px 0 calc(50% - 150px);
+    box-shadow: 10px 10px 5px black;
+}
+
+#four:hover{
+    opacity: 0.2;
+    transition: 1s;
+}
+
+#four:active{
+    opacity: 1;
+}
+
+.benefits-video{
+    background: #666666;
+    padding-top: 30px;
+    transition: 0.5s;
+}
+
+
+.benefits ul{
+    background: #666666;
+    margin-top: 5px;
+    font-size: 20px;
+    list-style: square;/*símbolo que fica no lado esquerdo da lista*/
+    display: inline-block;
+}
+
+.benefits li{
+    padding: 5px;
+}
+
+.benefits li:before{ /*li:before é um pseudo-elemento CSS que é usado para inserir conteúdo antes de cada elemento li.*/
+    content: "👍";
+}
+
+.benefits li:first-child{/*li:first-child é um seletor CSS que seleciona o primeiro elemento li de um conjunto de elementos li.*/
+    font-style: italic;
+}
+
+.benefits li::first-letter{/*li::first-letter é um seletor CSS que seleciona o primeiro caractere de cada elemento li. Ele é usado para estilizar o primeiro caractere de cada elemento li de forma diferente do restante do texto.*/
+    font-style: normal;
+}
+
+.benefits li:nth-child(3){/*li:nth-child(3) é um seletor CSS que seleciona o terceiro elemento li de um conjunto de elementos li. */
+    font-weight: bold;
+}
+
+.video{
+    width: 560px;
+    margin: 0 auto;
+    padding: 30px
+
+}
+#imgfrente{
+    border: 2px solid white;
+    border-radius: 5% 5% 5% 5%;
+}
+#banner_below{
+    width: 100%;
+    height: 700px;
+    border: 5px solid black;
+
+}
+
+footer{
+    text-align: center;
+    background: url("../imgs/bg.jpg");
+    line-height: 2;
+    margin-top: 0px;
+    color: white;
+}
+
+footer img{
+    margin-top: 20px;
+    width: 15em;
+}
+
+.copyright{
+    color: #FFFFFF;
+}
+
+#h1contato{
+    text-align: center
+
+}
+
+
+.input-pattern{
+    display: block;
+    padding: 10px 0;
+    position: relative;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.checkbox{
+    margin: 20px 0px;
+}
+
+#numerozap{
+    color: white;
+}
+
+#email{
+    color: white;
+}
+
+#iconwhatsapp{
+    width: 16px;
+    height: 16px;
+}
+
+#iconinstagram{
+    width: 18px;
+    height: 18px;
+}
+
+#iconemail{
+    width: 20px;
+    height: 20px;
+}
+
+#instagram{
+    color: white;
+}
+
+@media screen and (max-width: 960px){/*Responsivo*/
+    #box, .local, header, .main, body, .video, .map{
+        width: auto;
+    }
+    nav ul{
+        position: static;
+    }
+    #box, .benefits, #four{
+        text-align: center;
+        margin: 0;
+        float: unset;
+    }
+
+    .benefits li{
+        text-align:start;
+    }
+
+    .main{
+        margin: 30px 2em;
+    }
+    #cut{
+        margin: 5px 10px 0px 0px;
+    }
+
+    .products{
+        width: auto;
+    }
+
+    .products li{
+        text-align: center;
+        display: inline-block;
+        width: 100%;
+        margin: 30px auto;
+        padding: 0 0;
+        box-sizing: border-box;
+        border: 2px solid #000000;
+        border-radius: 10px;
+    }
+
+    .products h2{
+        margin: 10px 0;
+    }
+
+    .products li > img{
+        width: 8em;
+    }
+
+    .product-description{
+        margin: 0 20px 0 20px;
+    }
+
+    .product-price{
+        margin-bottom: 10px;
+    }
+
+
+}
+
+/* Adicione estas regras CSS para centralizar o formulário e seus elementos */
+
+.register {
+    display: flex;
+    flex-direction: column; /* Coloca os elementos um em cima do outro */
+    justify-content: center; /* Alinha horizontalmente ao centro */
+    align-items: center; /* Alinha verticalmente ao centro */
+    min-height: 100vh; /* Ocupa a altura total da viewport */
+    background-color: #686464;
+}
+
+.register h1 {
+    margin-bottom: 20px; /* Adiciona espaço abaixo do cabeçalho */
+    font-size: 24px; /* Tamanho da fonte do cabeçalho */
+    color: black; /* Cor do texto do cabeçalho */
+}
+
+form {
+    display: flex;
+    flex-direction: column; /* Coloca os elementos um em cima do outro */
+    align-items: center; /* Centraliza os elementos horizontalmente */
+    width: 100%; /* Garantir que o formulário ocupe toda a largura disponível */
+    max-width: 400px; /* Define uma largura máxima para o formulário */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra ao redor do formulário */
+    background-color: #fff; /* Define uma cor de fundo para o formulário */
+    border-radius: 10px; /* Define bordas arredondadas */
+}
+
+form label {
+    width: 100%; /* Faz com que os labels ocupem toda a largura do formulário */
+    margin-top: 10px;
+}
+
+form input {
+    width: 100%; /* Faz com que os inputs ocupem toda a largura do formulário */
+    padding: 10px;
+    margin-top: 5px; /* Adiciona espaço entre o label e o input */
+    border: 1px solid #ccc; /* Define uma borda para os inputs */
+    border-radius: 5px; /* Define bordas arredondadas */
+}
+
+form button {
+    width: 100%; /* Faz com que o botão ocupe toda a largura do formulário */
+    padding: 10px;
+    margin-top: 20px; /* Adiciona espaço entre o último input e o botão */
+    background-color: #990011; /* Cor de fundo do botão */
+    color: #fff; /* Cor do texto do botão */
+    border: none; /* Remove a borda do botão */
+    border-radius: 5px; /* Define bordas arredondadas */
+    cursor: pointer; /* Define o cursor do mouse como ponteiro ao passar sobre o botão */
+    font-size: 16px;
+}
+
+form button:hover {
+    background-color: #77000e; /* Cor de fundo do botão ao passar o mouse */
+}

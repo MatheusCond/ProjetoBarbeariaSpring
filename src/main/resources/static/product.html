@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+
+    <title>Barber Shop</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> <!--Font txt-->
+
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div id="box">
+        <h1><img src="imgs/logoBarbearia.jpg" alt="logo of Barber Shop"></h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<main>
+    <div>
+        <ul class="products">
+            <li>
+                <h2>Cabelo</h2>
+                <img src="imgs/Hair.png" onclick="openModal('Cabelo')">
+                <p class="product-description">Na tesoura ou na máquina. Como o cliente preferir</p>
+                <br>
+                <p class="product-price">R$ 25,00</p>
+            </li>
+            <li>
+                <h2>Barba</h2>
+                <img src="imgs/Barber.png" onclick="openModal('Barba')">
+                <p class="product-description">Corte e desenho de barba profissional</p>
+                <br>
+                <p class="product-price">R$ 25,00</p>
+            </li>
+            <li>
+                <h2>Cabelo e barba</h2>
+                <img src="imgs/Hair and barber.png" onclick="openModal('CabeloBarba')">
+                <p class="product-description">Pacote completo de cabelo e barba</p>
+                <br>
+                <p class="product-price">R$ 45,00</p>
+            </li>
+        </ul>
+    </div>
+</main>
+<footer>
+    <img src="imgs/logoBarbearia.jpg" alt="logo of Barber Shop">
+    <p class="copyright">&copy; Tiago Conde Siqueira. 2022</p>
+</footer>
+
+<div id="modalCabelo" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('Cabelo')">&times;</span>
+        <h2>Agendar Serviço de Cabelo</h2>
+        <form id="formAgendarCabelo">
+            <label for="dataCabelo">Data:</label>
+            <input type="date" id="dataCabelo" name="dataAgenda" required>
+
+            <label for="horarioCabelo">Horário:</label>
+            <input type="time" id="horarioCabelo" name="horaAgenda" required>
+
+            <label for="emailCabelo">Email:</label>
+            <input type="text" id="emailCabelo" name="clienteEmail" required>
+
+
+            <button type="button" onclick="agendarCabelo()">Agendar</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para Barba -->
+<div id="modalBarba" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('Barba')">&times;</span>
+        <h2>Agendar Serviço de Barba</h2>
+        <form id="formAgendarBarba">
+            <label for="dataBarba">Data:</label>
+            <input type="date" id="dataBarba" name="dataAgenda" required>
+
+            <label for="horarioBarba">Horário:</label>
+            <input type="time" id="horarioBarba" name="horaAgenda" required>
+
+            <label for="emailBarba">Email:</label>
+            <input type="text" id="emailBarba" name="clienteEmail" required>
+
+            <button type="button" onclick="agendarBarba()">Agendar</button>
+        </form>
+    </div>
+</div>
+
+<div id="modalCabeloBarba" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('CabeloBarba')">&times;</span>
+        <h2>Agendar Serviço de Cabelo e Barba</h2>
+        <form id="formAgendarCabeloBarba">
+            <label for="dataCabeloBarba">Data:</label>
+            <input type="date" id="dataCabeloBarba" name="dataAgenda" required>
+
+            <label for="horarioCabeloBarba">Horário:</label>
+            <input type="time" id="horarioCabeloBarba" name="horaAgenda" required>
+
+            <label for="emailCabeloBarba">Email:</label>
+            <input type="text" id="emailCabeloBarba" name="clienteEmail" required>
+
+            <button type="button" onclick="agendarCabeloBarba()">Agendar</button>
+        </form>
+    </div>
+</div>
+
+0
+<script>
+    function openModal(service) {
+        var modal = document.getElementById('modal' + service.replace(/ /g, ''));
+        modal.style.display = "block";
+    }
+
+    function closeModal(service) {
+        var modal = document.getElementById('modal' + service.replace(/ /g, ''));
+        modal.style.display = "none";
+    }
+
+    function agendarCabelo() {
+        var data = document.getElementById('dataCabelo').value;
+        var horario = document.getElementById('horarioCabelo').value;
+        var email = document.getElementById('emailCabelo').value;
+
+        var dataHora = {
+            dataAgenda: data,
+            horaAgenda: horario,
+            clienteEmail: email
+        };
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/agendas/agendar-cabelo");
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onload = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    window.location.href = "product.html";
+                } else {
+                    console.error('Erro ao enviar requisição: ' + xhr.status);
+                }
+            }
+        };
+        xhr.send(JSON.stringify(dataHora));
+    }
+
+    function agendarBarba() {
+        var data = document.getElementById('dataBarba').value;
+        var horario = document.getElementById('horarioBarba').value;
+        var email = document.getElementById('emailCabelo').value;
+
+        var dataHora = {
+            dataAgenda: data,
+            horaAgenda: horario,
+            clienteEmail: email
+        };
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/agendas/agendar-barba");
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8"); // Definir o Content-Type como application/json
+        xhr.onload = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    window.location.href = "product.html";
+                } else {
+                    console.error('Erro ao enviar requisição: ' + xhr.status);
+                }
+            }
+        };
+        xhr.send(JSON.stringify(dataHora));
+    }
+
+    function agendarCabeloBarba() {
+        var data = document.getElementById('dataCabeloBarba').value;
+        var horario = document.getElementById('horarioCabeloBarba').value;
+        var email = document.getElementById('emailCabelo').value;
+
+        var dataHora = {
+            dataAgenda: data,
+            horaAgenda: horario,
+            clienteEmail: email
+        };
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/agendas/agendar-cabelo-barba");
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onload = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    window.location.href = "product.html";
+                } else {
+                    console.error('Erro ao enviar requisição: ' + xhr.status);
+                }
+            }
+        };
+        xhr.send(JSON.stringify(dataHora));
+    }
+</script>
+</body>
+</html>
