@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/login.css">
+    <script src="js/login.js" type="text/javascript" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div id="box">
+        <nav>
+            <h1><img src="imgs/logoBarbearia.jpg" alt="logo of Barber Shop"></h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="register">
+        <h1>Login</h1>
+        <div id="mensagemErro" style="display: none; color: red;"></div>
+        <form id="formLogin" action="/usuarios/login-usuarios" method="post">
+            <label for="nomeUsuario">Nome:</label>
+            <input type="text" id="nomeUsuario" name="nomeUsuario" required>
+
+            <label for="senhaUsuario">Senha:</label>
+            <input type="password" id="senhaUsuario" name="senhaUsuario" required>
+            <button type="submit">Entrar</button>
+            <h3>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></h3>
+        </form>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Conde Barbearia. Todos os direitos reservados.</p>
+</footer>
+</body>
+</html>
+
