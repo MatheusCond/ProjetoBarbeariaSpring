@@ -5,7 +5,6 @@ import br.com.projetofatec.barbeariaconde.dto.DadosUsuariosDTO;
 import br.com.projetofatec.barbeariaconde.dto.UsuariosDTO;
 import br.com.projetofatec.barbeariaconde.model.Usuarios;
 import br.com.projetofatec.barbeariaconde.repository.UsuariosRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -14,9 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,9 +44,4 @@ public class UsuariosService implements UserDetailsService {
 
         return modelMapper.map(usuarios, DadosUsuariosDTO.class);
     }
-
-    public Page<UsuariosDTO> buscarUsuarios(Pageable paginacao) {
-        return usuariosRepository.findAll(paginacao).map(u -> modelMapper.map(u, UsuariosDTO.class));
-    }
-
 }

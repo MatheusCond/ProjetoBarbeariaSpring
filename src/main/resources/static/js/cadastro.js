@@ -1,5 +1,5 @@
 document.getElementById('formCadastro').addEventListener('submit', function(event) {
-    event.preventDefault(); // Evita que o formulário seja enviado diretamente
+    event.preventDefault();
 
     var formData = {
         nomeUsuario: document.getElementById('nomeUsuario').value,
@@ -24,12 +24,10 @@ document.getElementById('formCadastro').addEventListener('submit', function(even
         })
         .then(data => {
             console.log('Cliente cadastrado com sucesso:', data);
-            // Limpar campos do formulário ou redirecionar para outra página, se necessário
-            window.location.href = '/login.html'; // Substitua com o caminho correto para a tela de login
+            window.location.href = '/login.html';
         })
         .catch(error => {
             console.error('Erro ao cadastrar cliente:', error);
-            // Exibir mensagem de erro acima do formulário
             document.getElementById('mensagemErro').textContent = 'Usuário ou e-mail já existem';
             document.getElementById('mensagemErro').style.display = 'block';
         });

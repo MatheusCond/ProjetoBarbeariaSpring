@@ -12,7 +12,7 @@ header{
 
 .main{
     background: #CCCCCC;
-    padding: 10px;/*space around element inside borders*/
+    padding: 10px;
 
 }
 
@@ -38,12 +38,12 @@ em strong{
 
 .benefits{
     background: #ffffff;
-    padding: 10px;/* into space */
+    padding: 10px;
 }
 
 h2{
     font-size: 40px;
-    text-align: center;/*near of center*/
+    text-align: center;
 }
 
 #banner_below{
@@ -54,8 +54,8 @@ h2{
 
 ul{
     font-size: 25px;
-    display: inline-block; /*just the size of the content default, but can edit size */
-    vertical-align: top; /*near of top*/
-    margin-left: 10%; /*extern space*/
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 10%;
 }
 

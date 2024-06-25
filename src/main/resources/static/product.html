@@ -3,53 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-
     <title>Barber Shop</title>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/product.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> <!--Font txt-->
 
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.8);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 600px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            text-align: center;
-            position: relative;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-    </style>
 </head>
-
 <body>
 <header>
     <div id="box">
@@ -87,6 +47,10 @@
             </li>
         </ul>
     </div>
+
+    <div id="agendas">
+
+    </div>
 </main>
 <footer>
     <img src="imgs/logoBarbearia.jpg" alt="logo of Barber Shop">
@@ -97,7 +61,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('Cabelo')">&times;</span>
         <h2>Agendar Serviço de Cabelo</h2>
-        <form id="formAgendarCabelo">
+        <center><form id="formAgendarCabelo">
             <label for="dataCabelo">Data:</label>
             <input type="date" id="dataCabelo" name="dataAgenda" required>
 
@@ -107,9 +71,8 @@
             <label for="emailCabelo">Email:</label>
             <input type="text" id="emailCabelo" name="clienteEmail" required>
 
-
             <button type="button" onclick="agendarCabelo()">Agendar</button>
-        </form>
+        </form></center>
     </div>
 </div>
 
@@ -118,7 +81,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('Barba')">&times;</span>
         <h2>Agendar Serviço de Barba</h2>
-        <form id="formAgendarBarba">
+        <center><form id="formAgendarBarba">
             <label for="dataBarba">Data:</label>
             <input type="date" id="dataBarba" name="dataAgenda" required>
 
@@ -129,7 +92,7 @@
             <input type="text" id="emailBarba" name="clienteEmail" required>
 
             <button type="button" onclick="agendarBarba()">Agendar</button>
-        </form>
+        </form></center>
     </div>
 </div>
 
@@ -137,7 +100,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('CabeloBarba')">&times;</span>
         <h2>Agendar Serviço de Cabelo e Barba</h2>
-        <form id="formAgendarCabeloBarba">
+        <center><form id="formAgendarCabeloBarba">
             <label for="dataCabeloBarba">Data:</label>
             <input type="date" id="dataCabeloBarba" name="dataAgenda" required>
 
@@ -148,99 +111,35 @@
             <input type="text" id="emailCabeloBarba" name="clienteEmail" required>
 
             <button type="button" onclick="agendarCabeloBarba()">Agendar</button>
-        </form>
+        </form></center>
     </div>
 </div>
 
-0
-<script>
-    function openModal(service) {
-        var modal = document.getElementById('modal' + service.replace(/ /g, ''));
-        modal.style.display = "block";
-    }
+<div id="modalEditarAgenda" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('EditarAgenda')">&times;</span>
+        <h2>Editar Agenda</h2>
+        <center><form id="formEditarAgenda">
+            <input type="hidden" id="idAgenda" name="idAgenda">
 
-    function closeModal(service) {
-        var modal = document.getElementById('modal' + service.replace(/ /g, ''));
-        modal.style.display = "none";
-    }
+            <label for="servico">Serviço:</label>
+            <input type="text" id="servico" name="servico" required>
 
-    function agendarCabelo() {
-        var data = document.getElementById('dataCabelo').value;
-        var horario = document.getElementById('horarioCabelo').value;
-        var email = document.getElementById('emailCabelo').value;
+            <label for="dataAgendaEditar">Data:</label>
+            <input type="date" id="dataAgendaEditar" name="dataAgenda" required>
 
-        var dataHora = {
-            dataAgenda: data,
-            horaAgenda: horario,
-            clienteEmail: email
-        };
+            <label for="horarioAgendaEditar">Horário:</label>
+            <input type="time" id="horarioAgendaEditar" name="horaAgenda" required>
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/agendas/agendar-cabelo");
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.onload = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    window.location.href = "product.html";
-                } else {
-                    console.error('Erro ao enviar requisição: ' + xhr.status);
-                }
-            }
-        };
-        xhr.send(JSON.stringify(dataHora));
-    }
+            <label for="emailAgendaEditar">Email:</label>
+            <p id="emailAgendaEditar" name="clienteEmail"></p>
 
-    function agendarBarba() {
-        var data = document.getElementById('dataBarba').value;
-        var horario = document.getElementById('horarioBarba').value;
-        var email = document.getElementById('emailCabelo').value;
+            <button type="button" onclick="salvarEdicao()">Salvar Alterações</button>
+        </form></center>
+    </div>
+</div>
 
-        var dataHora = {
-            dataAgenda: data,
-            horaAgenda: horario,
-            clienteEmail: email
-        };
+<script src="js/product.js"></script>
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/agendas/agendar-barba");
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8"); // Definir o Content-Type como application/json
-        xhr.onload = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    window.location.href = "product.html";
-                } else {
-                    console.error('Erro ao enviar requisição: ' + xhr.status);
-                }
-            }
-        };
-        xhr.send(JSON.stringify(dataHora));
-    }
-
-    function agendarCabeloBarba() {
-        var data = document.getElementById('dataCabeloBarba').value;
-        var horario = document.getElementById('horarioCabeloBarba').value;
-        var email = document.getElementById('emailCabelo').value;
-
-        var dataHora = {
-            dataAgenda: data,
-            horaAgenda: horario,
-            clienteEmail: email
-        };
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/agendas/agendar-cabelo-barba");
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.onload = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    window.location.href = "product.html";
-                } else {
-                    console.error('Erro ao enviar requisição: ' + xhr.status);
-                }
-            }
-        };
-        xhr.send(JSON.stringify(dataHora));
-    }
-</script>
 </body>
 </html>
