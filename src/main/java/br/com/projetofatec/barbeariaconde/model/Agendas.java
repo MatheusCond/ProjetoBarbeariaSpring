@@ -20,11 +20,9 @@ public class Agendas {
     private String servico;
     private LocalDate dataAgenda;
     private LocalTime horaAgenda;
-    /*@ManyToOne
-    @JoinColumn(name = "cliente_email", referencedColumnName = "emailUsuario", nullable = false)
-    private Usuarios cliente;*/
+    private Integer status;
     @Email
-    @Column(name = "cliente_email", nullable = false)
+    @Column(name = "cliente_email", nullable = false, unique = true)
     private String clienteEmail;
     @ManyToOne
     @JoinColumn(name = "cliente_email", referencedColumnName = "emailUsuario", insertable = false, updatable = false)

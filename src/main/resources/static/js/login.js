@@ -1,5 +1,5 @@
 document.getElementById('formLogin').addEventListener('submit', function(event) {
-    event.preventDefault(); // Evita que o formulário seja enviado diretamente
+    event.preventDefault();
 
     var formData = {
         nomeUsuario: document.getElementById('nomeUsuario').value,
@@ -15,8 +15,7 @@ document.getElementById('formLogin').addEventListener('submit', function(event) 
     })
         .then(response => {
             if (response.ok) {
-                // Redirecionar para a página de agendamentos
-                window.location.href = '/product.html'; // Substitua com o caminho correto para a página de agendamentos
+                window.location.href = '/product.html';
             } else if (response.status === 401) {
                 throw new Error('Usuário ou senha incorretos');
             } else {

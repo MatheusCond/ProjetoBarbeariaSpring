@@ -12,9 +12,9 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class AgendasDTO{
-     private Long idAgenda;
      private String servico;
      private LocalDate dataAgenda;
      private LocalTime horaAgenda;
      private String clienteEmail;
+     private Integer status;
 }

@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UsuariosDTO {
-    private Long idUsuario;
     @NotBlank
     private String nomeUsuario;
     @Email

@@ -24,7 +24,6 @@ public class Usuarios implements UserDetails {
     private String senhaUsuario;
     private String telefone;
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
