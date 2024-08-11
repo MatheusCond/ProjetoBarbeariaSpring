@@ -1,8 +1,10 @@
 package br.com.projetofatec.barbeariaconde.controller;
 
+import br.com.projetofatec.barbeariaconde.config.TokenService;
 import br.com.projetofatec.barbeariaconde.config.ValidationErrorResponse;
 import br.com.projetofatec.barbeariaconde.dto.DadosUsuariosDTO;
 import br.com.projetofatec.barbeariaconde.dto.UsuariosDTO;
+import br.com.projetofatec.barbeariaconde.model.Usuarios;
 import br.com.projetofatec.barbeariaconde.service.UsuariosService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -24,12 +26,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping(name = "/usuarios")
 @RequiredArgsConstructor
 public class UsuariosController {
     private static final Logger logger = LoggerFactory.getLogger(UsuariosController.class);
     private final UsuariosService usuariosService;
     private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
 
     @PostMapping("/cadastrar-usuarios")
@@ -47,12 +50,12 @@ public class UsuariosController {
     }
 
     @PostMapping("/login-usuarios")
-    public ResponseEntity<Void> validationCredentialUser(@RequestBody @Valid UsuariosDTO credential){
+    public ResponseEntity validationCredentialUser(@RequestBody @Valid UsuariosDTO credential){
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(credential.getNomeUsuario(), credential.getSenhaUsuario());
 
         Authentication authentication = authenticationManager.authenticate(token);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(tokenService.criarToken((Usuarios) authentication.getPrincipal()));
     }
 }

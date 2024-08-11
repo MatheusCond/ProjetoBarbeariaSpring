@@ -123,7 +123,11 @@
             <input type="hidden" id="idAgenda" name="idAgenda">
 
             <label for="servico">Serviço:</label>
-            <input type="text" id="servico" name="servico" required>
+            <select id="servico" name="servico" required>
+                <option value="corte">Cabelo</option>
+                <option value="barba">Barba</option>
+                <option value="corte-barba">Cabelo + Barba</option>
+            </select>
 
             <label for="dataAgendaEditar">Data:</label>
             <input type="date" id="dataAgendaEditar" name="dataAgenda" required>
