@@ -20,7 +20,7 @@ public class TokenService {
                     .withIssuer("Barbearia Conde")  //Para quem é este token
                     .withSubject(usuarios.getNomeUsuario()) //Buscando Nome de Usuário para ter o token
                     .withExpiresAt(dataExpiracao.toInstant(ZoneOffset.of("-03:00"))) /*Padrão para definir tipo da expiração,
-sempre colocar assim*/
+sempre colocar assim aa*/
                     .sign(algorithm);
 
         } catch (JWTCreationException e){
