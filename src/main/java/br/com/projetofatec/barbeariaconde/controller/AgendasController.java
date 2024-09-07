@@ -37,7 +37,7 @@ public class AgendasController {
     }
 
     @GetMapping("/buscar-agendas")
-    public Page<AgendasDTO> buscarAgendas(@PageableDefault(size = 10)Pageable paginacao) {
+    public Page<AgendasDTO> buscarAgendas(@PageableDefault(size = 12)Pageable paginacao) {
         return agendaService.buscarAgendas(paginacao);
     }
 
