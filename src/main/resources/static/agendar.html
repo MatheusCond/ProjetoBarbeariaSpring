@@ -1,76 +1,144 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Agendar - Barbearia Conde</title>
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/agenda.css">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <title>Agendar — Barbearia Conde</title>
+    <link rel="icon" href="imgs/logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="css/app.css">
     <script src="js/api.js" defer></script>
+    <script src="js/ui.js" defer></script>
     <script src="js/nav.js" defer></script>
     <script src="js/agendar.js" defer></script>
 </head>
+
 <body>
-<header>
-    <div id="box">
-        <h1><img src="imgs/logoBarbearia.jpg" alt="Logo da Barbearia Conde"></h1>
+<header class="topo">
+    <div class="container">
+        <a class="marca" href="index.html">
+            <img src="imgs/logo.jpg" alt="Brasão da Barbearia Conde">
+            <span class="marca-texto">
+                <span class="marca-nome">Conde</span>
+                <span class="marca-sub">Barbearia</span>
+            </span>
+        </a>
+        <button class="menu-botao" data-menu-botao type="button"
+                aria-label="Abrir menu" aria-expanded="false"></button>
         <nav>
-            <ul data-nav>
-                <li><a href="index.html">Home</a></li>
+            <ul class="menu" data-nav data-aberto="false">
+                <li><a href="index.html">Início</a></li>
             </ul>
         </nav>
     </div>
 </header>
 
-<main class="pagina-agenda">
-    <div id="aviso" class="caixa-aviso" hidden></div>
-
-    <div id="avisoLogin" class="caixa-aviso info" hidden>
-        Você pode conferir os horários livres sem entrar.
-        Para reservar, <a href="login.html">faça login</a> ou
-        <a href="cadastro.html">crie sua conta</a>.
+<div class="topo-pagina">
+    <div class="container">
+        <div>
+            <span class="sobrescrito">Agenda</span>
+            <h1>Reserve seu horário</h1>
+            <p>Aparecem somente os horários em que o atendimento inteiro cabe na agenda.</p>
+        </div>
     </div>
+</div>
 
-    <section class="etapa">
-        <h2 class="title_main">1. Escolha o serviço</h2>
-        <ul class="products" id="servicos"></ul>
-    </section>
+<main>
+    <section class="secao secao--compacta">
+        <div class="container">
+            <div id="aviso" class="alerta" hidden></div>
+            <div id="avisoLogin" class="alerta alerta--info" hidden>
+                <span>Você pode conferir os horários livres sem entrar. Para reservar,
+                    <a href="login.html">faça login</a> ou
+                    <a href="cadastro.html">crie sua conta</a>.</span>
+            </div>
 
-    <section class="etapa">
-        <h2 class="title_main">2. Escolha o dia e o profissional</h2>
-        <div class="filtros-agenda">
-            <label for="data">Data
-                <input type="date" id="data" required>
-            </label>
-            <label for="barbeiro">Profissional
-                <select id="barbeiro">
-                    <option value="">Qualquer profissional disponível</option>
-                </select>
-            </label>
+            <ol class="passos">
+                <li class="passo">
+                    <span class="passo-numero">1</span>
+                    <span><strong>Serviço</strong><span>O que você quer fazer</span></span>
+                </li>
+                <li class="passo">
+                    <span class="passo-numero">2</span>
+                    <span><strong>Dia e profissional</strong><span>Quando e com quem</span></span>
+                </li>
+                <li class="passo">
+                    <span class="passo-numero">3</span>
+                    <span><strong>Horário</strong><span>Escolha e confirme</span></span>
+                </li>
+            </ol>
+
+            <div class="cabecalho-secao">
+                <span class="sobrescrito">Etapa 1</span>
+                <h2>Escolha o serviço</h2>
+            </div>
+            <div class="grade-servicos" id="servicos"></div>
         </div>
     </section>
 
-    <section class="etapa">
-        <h2 class="title_main">3. Escolha o horário</h2>
-        <div id="barraReagendamento" class="caixa-aviso info" hidden>
-            <span id="textoReagendamento"></span>
-            <button type="button" id="cancelarReagendamento" class="secundario">Desistir</button>
+    <section class="secao secao--compacta secao--clara">
+        <div class="container">
+            <div class="cabecalho-secao">
+                <span class="sobrescrito">Etapa 2</span>
+                <h2>Dia e profissional</h2>
+            </div>
+
+            <div class="barra-filtros barra-filtros--2">
+                <div class="campo">
+                    <label for="data">Data</label>
+                    <input type="date" id="data" required>
+                </div>
+                <div class="campo">
+                    <label for="barbeiro">Profissional</label>
+                    <select id="barbeiro">
+                        <option value="">Qualquer profissional disponível</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <p class="legenda">Só aparecem horários em que o atendimento inteiro cabe na agenda.</p>
-        <div id="horarios" class="grade-horarios"></div>
     </section>
 
-    <section class="etapa" id="secaoMeusAgendamentos" hidden>
-        <h2 class="title_main">Meus agendamentos</h2>
-        <div id="agendas"></div>
+    <section class="secao secao--compacta">
+        <div class="container">
+            <div class="cabecalho-secao">
+                <span class="sobrescrito">Etapa 3</span>
+                <h2>Escolha o horário</h2>
+                <p id="resumoEscolha"></p>
+            </div>
+
+            <div id="barraReagendamento" class="alerta alerta--info" hidden>
+                <span id="textoReagendamento"></span>
+                <button type="button" id="cancelarReagendamento"
+                        class="btn btn--contorno btn--p">Desistir</button>
+            </div>
+
+            <div id="horarios" class="grade-horarios"></div>
+        </div>
+    </section>
+
+    <section class="secao secao--compacta secao--clara" id="secaoMeusAgendamentos" hidden>
+        <div class="container">
+            <div class="cabecalho-secao">
+                <span class="sobrescrito">Sua conta</span>
+                <h2>Meus agendamentos</h2>
+            </div>
+            <div id="agendas" class="lista-agendamentos"></div>
+        </div>
     </section>
 </main>
 
-<footer>
-    <img src="imgs/logoBarbearia.jpg" alt="Logo da Barbearia Conde">
-    <p class="copyright">&copy; Tiago Conde Siqueira</p>
+<footer class="rodape">
+    <div class="container">
+        <div class="rodape-fim" style="padding-top: 0">
+            <span>&copy; <span id="ano"></span> Tiago Conde Siqueira.</span>
+            <a href="index.html">Voltar ao site</a>
+        </div>
+    </div>
 </footer>
 </body>
+
 </html>

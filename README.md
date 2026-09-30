@@ -238,10 +238,39 @@ src/main/java/br/com/projetofatec/barbeariaconde/
 └── service/         # UsuarioService, AuthService, DisponibilidadeService, AgendamentoService
 
 src/main/resources/static/
-├── index.html  agendar.html  painel.html  login.html  cadastro.html
-├── css/
-└── js/         api.js (sessão e chamadas) · nav.js · agendar.js · painel.js · login.js · cadastro.js
+├── index.html      # landing: hero, serviços, sobre, galeria, contato
+├── agendar.html    # fluxo de reserva em 3 etapas
+├── painel.html     # agenda da equipe
+├── login.html  cadastro.html
+├── css/app.css     # design system inteiro: tokens, reset e componentes
+└── js/
+    ├── api.js      # sessão e chamadas à API
+    ├── ui.js       # ícones SVG, formatação e o cartão de serviço
+    ├── nav.js      # cabeçalho conforme a sessão + menu mobile
+    └── home.js  agendar.js  painel.js  login.js  cadastro.js
 ```
+
+### Front-end
+
+O visual segue o padrão que o segmento usa hoje: **escuro com dourado**, escolhido
+a partir da própria marca (o brasão vintage em preto e branco) e do acervo de fotos
+sépia da barbearia. Tipografia em Oswald para títulos e Inter para texto.
+
+- **Um arquivo de estilo.** `app.css` reúne tokens, reset e componentes; os sete CSS
+  anteriores se sobrepunham (`login.css` era uma cópia de `style.css` com um trecho a
+  mais no fim). Trocar a paleta é editar as variáveis de `:root`.
+- **Simetria por grid.** Cartões de serviço, diferenciais, métricas e horários usam
+  grades de colunas iguais, e o rodapé de cada cartão é empurrado para baixo, de modo
+  que todos terminam na mesma linha independentemente do tamanho do texto.
+- **Login e cadastro em split screen**, metade foto e metade formulário, que é o
+  formato mais usado hoje para essas telas.
+- **Ícones em SVG inline** no lugar dos PNGs: herdam a cor do contexto, escalam sem
+  perder nitidez e não custam requisição.
+- **Imagens otimizadas.** As fotos vieram como PNG (uma delas com 4,2 MB); viraram
+  JPEG redimensionado. A pasta `imgs/` caiu de 6,4 MB para 708 KB.
+- **Catálogo vindo da API.** A vitrine da home consome `GET /api/servicos`, então
+  preço e duração exibidos são sempre os que o agendamento vai aplicar.
+- Responsivo com menu recolhido em telas estreitas, verificado em 1280px e 375px.
 
 ### Decisões de modelagem
 

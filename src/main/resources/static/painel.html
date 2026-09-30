@@ -1,77 +1,115 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Painel da equipe - Barbearia Conde</title>
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/agenda.css">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <title>Painel — Barbearia Conde</title>
+    <link rel="icon" href="imgs/logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="css/app.css">
     <script src="js/api.js" defer></script>
+    <script src="js/ui.js" defer></script>
     <script src="js/nav.js" defer></script>
     <script src="js/painel.js" defer></script>
 </head>
+
 <body>
-<header>
-    <div id="box">
-        <h1><img src="imgs/logoBarbearia.jpg" alt="Logo da Barbearia Conde"></h1>
+<header class="topo">
+    <div class="container">
+        <a class="marca" href="index.html">
+            <img src="imgs/logo.jpg" alt="Brasão da Barbearia Conde">
+            <span class="marca-texto">
+                <span class="marca-nome">Conde</span>
+                <span class="marca-sub">Barbearia</span>
+            </span>
+        </a>
+        <button class="menu-botao" data-menu-botao type="button"
+                aria-label="Abrir menu" aria-expanded="false"></button>
         <nav>
-            <ul data-nav>
-                <li><a href="index.html">Home</a></li>
+            <ul class="menu" data-nav data-aberto="false">
+                <li><a href="index.html">Início</a></li>
             </ul>
         </nav>
     </div>
 </header>
 
-<main class="pagina-agenda">
-    <h2 class="title_main">Agenda da barbearia</h2>
-
-    <form id="filtros" class="filtros-agenda">
-        <label for="de">De
-            <input type="date" id="de">
-        </label>
-        <label for="ate">Até
-            <input type="date" id="ate">
-        </label>
-        <label for="statusFiltro">Situação
-            <select id="statusFiltro">
-                <option value="">Todas</option>
-                <option value="AGENDADO">Agendado</option>
-                <option value="CONCLUIDO">Concluído</option>
-                <option value="CANCELADO">Cancelado</option>
-                <option value="NAO_COMPARECEU">Não compareceu</option>
-            </select>
-        </label>
-        <label for="barbeiroFiltro">Profissional
-            <select id="barbeiroFiltro"></select>
-        </label>
-        <button type="submit">Filtrar</button>
-    </form>
-
-    <p id="resumo" class="legenda"></p>
-
-    <div class="tabela-rolavel">
-        <table class="tabela-agenda">
-            <thead>
-            <tr>
-                <th>Data</th>
-                <th>Horário</th>
-                <th>Serviço</th>
-                <th>Cliente</th>
-                <th>Profissional</th>
-                <th>Situação</th>
-                <th>Ações</th>
-            </tr>
-            </thead>
-            <tbody id="corpoAgenda"></tbody>
-        </table>
+<div class="topo-pagina">
+    <div class="container">
+        <div>
+            <span class="sobrescrito">Equipe</span>
+            <h1>Agenda da barbearia</h1>
+            <p id="resumo">Carregando...</p>
+        </div>
+        <div class="hero-acoes" style="margin-top: 0">
+            <button type="button" id="hoje" class="btn btn--contorno btn--p">Hoje</button>
+            <button type="button" id="semana" class="btn btn--contorno btn--p">Próximos 7 dias</button>
+        </div>
     </div>
+</div>
+
+<main>
+    <section class="secao secao--compacta">
+        <div class="container">
+            <div class="metricas" id="metricas"></div>
+
+            <form id="filtros" class="barra-filtros">
+                <div class="campo">
+                    <label for="de">De</label>
+                    <input type="date" id="de">
+                </div>
+                <div class="campo">
+                    <label for="ate">Até</label>
+                    <input type="date" id="ate">
+                </div>
+                <div class="campo">
+                    <label for="statusFiltro">Situação</label>
+                    <select id="statusFiltro">
+                        <option value="">Todas</option>
+                        <option value="AGENDADO">Agendado</option>
+                        <option value="CONCLUIDO">Concluído</option>
+                        <option value="CANCELADO">Cancelado</option>
+                        <option value="NAO_COMPARECEU">Não compareceu</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="barbeiroFiltro">Profissional</label>
+                    <select id="barbeiroFiltro"></select>
+                </div>
+                <button type="submit" class="btn btn--ouro">Filtrar</button>
+            </form>
+
+            <div class="tabela-envolucro">
+                <table class="tabela">
+                    <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Horário</th>
+                        <th>Serviço</th>
+                        <th>Cliente</th>
+                        <th>Profissional</th>
+                        <th>Situação</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody id="corpoAgenda"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
 </main>
 
-<footer>
-    <img src="imgs/logoBarbearia.jpg" alt="Logo da Barbearia Conde">
-    <p class="copyright">&copy; Tiago Conde Siqueira</p>
+<footer class="rodape">
+    <div class="container">
+        <div class="rodape-fim" style="padding-top: 0">
+            <span>&copy; <span id="ano"></span> Tiago Conde Siqueira.</span>
+            <a href="index.html">Voltar ao site</a>
+        </div>
+    </div>
 </footer>
 </body>
+
 </html>

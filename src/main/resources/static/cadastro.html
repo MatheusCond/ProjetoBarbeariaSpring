@@ -1,59 +1,89 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cadastro - Barbearia Conde</title>
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/cadastro.css">
-    <link rel="stylesheet" href="css/agenda.css">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <title>Criar conta — Barbearia Conde</title>
+    <link rel="icon" href="imgs/logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="css/app.css">
     <script src="js/api.js" defer></script>
+    <script src="js/ui.js" defer></script>
     <script src="js/cadastro.js" defer></script>
 </head>
+
 <body>
-<header>
-    <div id="box">
-        <nav>
-            <h1><img src="imgs/logoBarbearia.jpg" alt="Logo da Barbearia Conde"></h1>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="login.html">Login</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+<main class="auth">
+    <aside class="auth-arte" style="background-image: url('imgs/salao.jpg')">
+        <a class="marca" href="index.html">
+            <img src="imgs/logo.jpg" alt="Brasão da Barbearia Conde">
+            <span class="marca-texto">
+                <span class="marca-nome">Conde</span>
+                <span class="marca-sub">Barbearia</span>
+            </span>
+        </a>
+        <div class="auth-arte-texto">
+            <h2>Crie sua conta em um minuto</h2>
+            <p>Depois é só escolher o serviço e o horário. A confirmação é na hora.</p>
+            <ul class="auth-lista" id="vantagens"></ul>
+        </div>
+    </aside>
 
-<main>
-    <section class="register">
-        <h1>Cadastro</h1>
-        <div id="mensagemErro" class="caixa-aviso erro" style="display: none;"></div>
-        <form id="formCadastro" novalidate>
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome" autocomplete="name" required>
+    <section class="auth-painel">
+        <div class="auth-caixa">
+            <a class="auth-voltar" href="index.html" id="voltar">Voltar ao site</a>
 
-            <label for="email">E-mail:</label>
-            <input type="email" id="email" name="email" autocomplete="email" required>
+            <header>
+                <h1>Criar conta</h1>
+                <p>Leva menos tempo que esperar na fila.</p>
+            </header>
 
-            <label for="senha">Senha (mínimo 8 caracteres):</label>
-            <input type="password" id="senha" name="senha" autocomplete="new-password"
-                   minlength="8" required>
+            <div id="mensagemErro" class="alerta alerta--erro" hidden></div>
 
-            <label for="telefone">Telefone:</label>
-            <input type="tel" id="telefone" name="telefone" placeholder="(17) 99999-9999"
-                   autocomplete="tel" required>
+            <form id="formCadastro" class="auth-form" novalidate>
+                <div class="campo">
+                    <label for="nome">Nome completo</label>
+                    <input type="text" id="nome" name="nome" autocomplete="name"
+                           placeholder="Como quer ser chamado" required>
+                </div>
 
-            <label for="endereco">Endereço (opcional):</label>
-            <input type="text" id="endereco" name="endereco" autocomplete="street-address">
+                <div class="campo">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" autocomplete="email"
+                           placeholder="voce@exemplo.com" required>
+                </div>
 
-            <button type="submit">Cadastrar</button>
-            <h3>Já tem conta? <a href="login.html">Entrar</a></h3>
-        </form>
+                <div class="campo">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha" autocomplete="new-password"
+                           placeholder="Mínimo de 8 caracteres" minlength="8" required>
+                </div>
+
+                <div class="campo">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" id="telefone" name="telefone" autocomplete="tel"
+                           placeholder="(17) 99999-9999" required>
+                </div>
+
+                <div class="campo">
+                    <label for="endereco">Endereço <span class="ajuda">(opcional)</span></label>
+                    <input type="text" id="endereco" name="endereco"
+                           autocomplete="street-address" placeholder="Rua, número e bairro">
+                </div>
+
+                <button type="submit" class="btn btn--ouro btn--bloco">Criar conta</button>
+            </form>
+
+            <p class="auth-rodape">
+                Já tem conta? <a href="login.html">Entrar</a>
+            </p>
+        </div>
     </section>
 </main>
-
-<footer>
-    <p class="copyright">&copy; 2024 Conde Barbearia. Todos os direitos reservados.</p>
-</footer>
 </body>
+
 </html>

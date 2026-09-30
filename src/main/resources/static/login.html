@@ -1,48 +1,71 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login - Barbearia Conde</title>
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="css/agenda.css">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <title>Entrar — Barbearia Conde</title>
+    <link rel="icon" href="imgs/logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="css/app.css">
     <script src="js/api.js" defer></script>
+    <script src="js/ui.js" defer></script>
     <script src="js/login.js" defer></script>
 </head>
+
 <body>
-<header>
-    <div id="box">
-        <nav>
-            <h1><img src="imgs/logoBarbearia.jpg" alt="Logo da Barbearia Conde"></h1>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="agendar.html">Agendar</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+<main class="auth">
+    <aside class="auth-arte" style="background-image: url('imgs/cut.jpg')">
+        <a class="marca" href="index.html">
+            <img src="imgs/logo.jpg" alt="Brasão da Barbearia Conde">
+            <span class="marca-texto">
+                <span class="marca-nome">Conde</span>
+                <span class="marca-sub">Barbearia</span>
+            </span>
+        </a>
+        <div class="auth-arte-texto">
+            <h2>Sua cadeira está reservada</h2>
+            <p>Entre para ver seus agendamentos, remarcar ou reservar um novo horário.</p>
+            <ul class="auth-lista" id="vantagens"></ul>
+        </div>
+    </aside>
 
-<main>
-    <section class="register">
-        <h1>Login</h1>
-        <div id="mensagemErro" class="caixa-aviso erro" style="display: none;"></div>
-        <form id="formLogin" novalidate>
-            <label for="email">E-mail:</label>
-            <input type="email" id="email" name="email" autocomplete="email" required>
+    <section class="auth-painel">
+        <div class="auth-caixa">
+            <a class="auth-voltar" href="index.html" id="voltar">Voltar ao site</a>
 
-            <label for="senha">Senha:</label>
-            <input type="password" id="senha" name="senha" autocomplete="current-password" required>
+            <header>
+                <h1>Entrar</h1>
+                <p>Use o e-mail cadastrado na barbearia.</p>
+            </header>
 
-            <button type="submit">Entrar</button>
-            <h3>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></h3>
-        </form>
+            <div id="mensagemErro" class="alerta alerta--erro" hidden></div>
+
+            <form id="formLogin" class="auth-form" novalidate>
+                <div class="campo">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" autocomplete="email"
+                           placeholder="voce@exemplo.com" required>
+                </div>
+
+                <div class="campo">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha"
+                           autocomplete="current-password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn--ouro btn--bloco">Entrar</button>
+            </form>
+
+            <p class="auth-rodape">
+                Ainda não tem conta? <a href="cadastro.html">Cadastre-se</a>
+            </p>
+        </div>
     </section>
 </main>
-
-<footer>
-    <p class="copyright">&copy; 2024 Conde Barbearia. Todos os direitos reservados.</p>
-</footer>
 </body>
+
 </html>

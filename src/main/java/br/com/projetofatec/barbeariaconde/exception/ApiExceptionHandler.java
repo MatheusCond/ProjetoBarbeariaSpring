@@ -17,6 +17,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
 
@@ -42,6 +43,19 @@ public class ApiExceptionHandler {
     @ExceptionHandler(RecursoNaoEncontradoException.class)
     public ResponseEntity<ErroResposta> naoEncontrado(RecursoNaoEncontradoException ex, HttpServletRequest req) {
         return ErroResposta.resposta(HttpStatus.NOT_FOUND, ex.getMessage(), req.getRequestURI());
+    }
+
+    /**
+     * URL sem recurso correspondente (imagem removida, caminho digitado errado).
+     *
+     * <p>Precisa ser tratada explicitamente: sem isto ela cai no handler genérico
+     * de {@code Exception} e vira 500 com stack trace no log, quando o correto é 404.
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErroResposta> recursoEstaticoAusente(NoResourceFoundException ex,
+                                                               HttpServletRequest req) {
+        return ErroResposta.resposta(HttpStatus.NOT_FOUND,
+                "Recurso não encontrado.", req.getRequestURI());
     }
 
     /**

@@ -4,91 +4,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Barbearia Conde</title>
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/agenda.css">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <title>Barbearia Conde — Cabelo e barba em Bady Bassitt</title>
+    <meta name="description"
+          content="Barbearia Conde: cabelo, barba e pacote completo em Bady Bassitt. Veja os horários livres e agende online.">
+    <link rel="icon" href="imgs/logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="css/app.css">
     <script src="js/api.js" defer></script>
+    <script src="js/ui.js" defer></script>
     <script src="js/nav.js" defer></script>
+    <script src="js/home.js" defer></script>
 </head>
 
 <body>
-    <header>
-        <div id="box">
-            <nav>
-                <h1><img src="imgs/logoBarbearia.jpg" alt="Logo da Barbearia Conde"></h1>
+<header class="topo">
+    <div class="container">
+        <a class="marca" href="index.html">
+            <img src="imgs/logo.jpg" alt="Brasão da Barbearia Conde">
+            <span class="marca-texto">
+                <span class="marca-nome">Conde</span>
+                <span class="marca-sub">Barbearia</span>
+            </span>
+        </a>
+        <button class="menu-botao" data-menu-botao type="button"
+                aria-label="Abrir menu" aria-expanded="false"></button>
+        <nav>
+            <ul class="menu" data-nav data-aberto="false">
+                <li><a href="index.html">Início</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
 
-                <ul data-nav>
-                    <li><a href="login.html">Login</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    <main>
-        <img src="imgs/on.jpg" id="banner" alt="Itens de barbearia">
-
-        <section class="main">
-            <h2 class="title_main"> Sobre a Barbearia </h2>
-
-            <img src="imgs/cut.jpg" id="cut" alt="cuting barber of men">
-
-            <p id="greate"> Localizada em Bady Bassit, <strong> a barbearia </strong> traz ao mercado oque há de melhor para o seu cabelo e barba. Fundada em 2020, a barbearia ja é destaque na cidade e conquista novos clientes a cada dia. </p>
-
-            <p> Nossa missão é: <em> <strong> "Proporcionar autoestima e qualidade de vida aos clientes". </strong> </em> </p>
-
-
-        </section>
-
-        <section class="chamada-agendamento">
-            <h2 class="title_main">Agende seu horário</h2>
-            <p class="legenda">Veja os horários livres em tempo real e reserve em poucos cliques.</p>
-            <a class="botao-principal" href="agendar.html">Ver horários disponíveis</a>
-        </section>
-
-        <section class="local">
-            <h2>Local</h2>
-            
-            <div class="map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14907.235075248118!2d-49.46949949218746!3d-20.920012000000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94bdb74cdc1c711b%3A0xe151e6e1ae4be27c!2sBarbearia%20Conde!5e0!3m2!1spt-BR!2sbr!4v1670783344380!5m2!1spt-BR!2sbr" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            
+<main>
+    <section class="hero">
+        <div class="hero-fundo" style="background-image: url('imgs/on.jpg')"></div>
+        <div class="container">
+            <span class="sobrescrito">Desde 2020 em Bady Bassitt</span>
+            <h1>Seu corte no horário<em>que é seu de verdade</em></h1>
+            <p>
+                Escolha o serviço, veja os horários que estão realmente livres e reserve
+                em menos de um minuto. Sem fila, sem telefonema, sem dois clientes no
+                mesmo horário.
+            </p>
+            <div class="hero-acoes">
+                <a class="btn btn--ouro" href="agendar.html">Agendar horário</a>
+                <a class="btn btn--contorno" href="#servicos">Ver serviços</a>
             </div>
-        </section>
-        <div class="benefits-video">
-            <section class="benefits">
-                <h2 class="title_main"> Beneficios </h2>
+
+            <div class="faixa-info">
                 <div>
-                    <img src="imgs/4.png" id="four" alt="Número quatro">
-                    <ul>
-                        <li>Atendimento ao cliente</li>
-                        <li>Profissional qualificado</li>
-                        <li>Bem localizado</li>
-                        <li>Ambiente diferenciado</li>
-                    </ul>
-                </div>    
-            </section>
-
-            <div class="video">
-    
-                <img src="imgs/foto da frente.png" id="imgfrente" alt="Fachada da barbearia" width="100%" height="315">
-            
+                    <strong>Ter — Sáb</strong>
+                    <span>Atendimento</span>
+                </div>
+                <div>
+                    <strong>R$ 25</strong>
+                    <span>A partir de</span>
+                </div>
+                <div>
+                    <strong>30 min</strong>
+                    <span>Duração média</span>
+                </div>
             </div>
         </div>
-        <img src="imgs/foto de dentro.png" id="banner_below" alt="Interior da barbearia">
-    </main>
-    <footer>
-        <img src="imgs/logoBarbearia.jpg" alt="logo of Barber Shop">
-        <p class="copyright">&copy; Tiago Conde Siqueira. 2022</p>
-        <p id="numerozap">
-            <img src="imgs/icons8-whatsapp-16.png" id="iconwhatsapp" alt="icone WhatsApp">
-             17992426593</p>
-        <p id="email">
-            <img src="imgs/icons8-mail-48.png" id="iconemail" alt="icone email">
-             tcondesiq299@hotmail.com</p>
-        <p id="instagram">
-            <img src="imgs/icons8-instagram-48.png" id="iconinstagram" alt="icone Instagram">
-             @barbeariaconde_</p>
-    </footer>
+    </section>
+
+    <section class="secao" id="servicos">
+        <div class="container">
+            <div class="cabecalho-secao">
+                <span class="sobrescrito">O que fazemos</span>
+                <h2>Serviços</h2>
+                <p>Preço e duração saem direto do sistema de agendamento, então o que
+                    você vê aqui é exatamente o que será cobrado e reservado.</p>
+            </div>
+            <div class="grade-servicos" id="servicosHome"></div>
+        </div>
+    </section>
+
+    <section class="secao secao--clara">
+        <div class="container">
+            <div class="duas-colunas">
+                <img src="imgs/cut.jpg" alt="Barbeiro aparando a barba de um cliente">
+                <div>
+                    <span class="sobrescrito">A casa</span>
+                    <h2>Sobre a barbearia</h2>
+                    <p>
+                        Localizada em Bady Bassitt, a barbearia traz ao mercado o que há de
+                        melhor para o seu cabelo e barba. Fundada em 2020, já é destaque na
+                        cidade e conquista novos clientes a cada dia.
+                    </p>
+                    <p>
+                        Trabalho feito com calma, na tesoura ou na máquina, do jeito que o
+                        cliente prefere — e com o horário respeitado.
+                    </p>
+                    <p class="citacao">
+                        “Proporcionar autoestima e qualidade de vida aos clientes.”
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="secao">
+        <div class="container">
+            <div class="cabecalho-secao">
+                <span class="sobrescrito">Por que a Conde</span>
+                <h2>Diferenciais</h2>
+            </div>
+            <div class="grade grade--4" id="diferenciais"></div>
+        </div>
+    </section>
+
+    <section class="secao secao--clara">
+        <div class="container">
+            <div class="cabecalho-secao">
+                <span class="sobrescrito">O ambiente</span>
+                <h2>Conheça o espaço</h2>
+            </div>
+            <div class="galeria">
+                <figure>
+                    <img src="imgs/fachada.jpg" alt="Fachada da Barbearia Conde">
+                    <figcaption>A fachada</figcaption>
+                </figure>
+                <figure>
+                    <img src="imgs/salao.jpg" alt="Interior da Barbearia Conde">
+                    <figcaption>O salão</figcaption>
+                </figure>
+                <figure>
+                    <img src="imgs/on.jpg" alt="Ferramentas de barbearia sobre a bancada">
+                    <figcaption>As ferramentas</figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <section class="secao" id="contato">
+        <div class="container">
+            <div class="cabecalho-secao">
+                <span class="sobrescrito">Onde estamos</span>
+                <h2>Visite a barbearia</h2>
+            </div>
+            <div class="duas-colunas">
+                <div class="mapa">
+                    <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14907.235075248118!2d-49.46949949218746!3d-20.920012000000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94bdb74cdc1c711b%3A0xe151e6e1ae4be27c!2sBarbearia%20Conde!5e0!3m2!1spt-BR!2sbr!4v1670783344380!5m2!1spt-BR!2sbr"
+                            title="Mapa da Barbearia Conde" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                <ul class="contato-lista" id="contatoLista"></ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="secao secao--compacta secao--clara">
+        <div class="container">
+            <div class="cabecalho-secao" style="margin-bottom: 0">
+                <span class="sobrescrito">Vamos lá</span>
+                <h2>Escolha seu horário agora</h2>
+                <p>A agenda abre com até 60 dias de antecedência e mostra somente o que
+                    está de fato disponível.</p>
+                <div class="hero-acoes">
+                    <a class="btn btn--ouro" href="agendar.html">Ver horários disponíveis</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="rodape">
+    <div class="container">
+        <div class="rodape-grade">
+            <div>
+                <a class="marca" href="index.html">
+                    <img src="imgs/logo.jpg" alt="Brasão da Barbearia Conde">
+                    <span class="marca-texto">
+                        <span class="marca-nome">Conde</span>
+                        <span class="marca-sub">Barbearia</span>
+                    </span>
+                </a>
+                <p>Cabelo, barba e pacote completo em Bady Bassitt — São Paulo.</p>
+            </div>
+            <div>
+                <h4>Navegação</h4>
+                <ul>
+                    <li><a href="index.html#servicos">Serviços</a></li>
+                    <li><a href="index.html#contato">Contato</a></li>
+                    <li><a href="agendar.html">Agendar</a></li>
+                    <li><a href="login.html">Entrar</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Atendimento</h4>
+                <ul>
+                    <li><span>Terça a sexta: 09h às 19h</span></li>
+                    <li><span>Sábado: 08h às 18h</span></li>
+                    <li><span>Domingo e segunda: fechado</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="rodape-fim">
+            <span>&copy; <span id="ano"></span> Tiago Conde Siqueira. Todos os direitos reservados.</span>
+            <span>Feito com Spring Boot</span>
+        </div>
+    </div>
+</footer>
 </body>
+
 </html>

@@ -1,13 +1,29 @@
+const VANTAGENS = [
+    'Sem taxa e sem compromisso',
+    'Agende com até 60 dias de antecedência',
+    'Cancele até 2 horas antes'
+];
+
+const ROTULOS = {
+    nome: 'Nome',
+    email: 'E-mail',
+    senha: 'Senha',
+    telefone: 'Telefone',
+    endereco: 'Endereço'
+};
+
 document.addEventListener('DOMContentLoaded', () => {
+    decorar();
+
     const formulario = document.getElementById('formCadastro');
     const erro = document.getElementById('mensagemErro');
     const botao = formulario.querySelector('button[type="submit"]');
 
     formulario.addEventListener('submit', async (evento) => {
         evento.preventDefault();
-        erro.style.display = 'none';
+        erro.hidden = true;
         botao.disabled = true;
-        botao.textContent = 'Cadastrando...';
+        botao.textContent = 'Criando conta...';
 
         try {
             await API.registrar({
@@ -21,10 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'agendar.html';
         } catch (e) {
             erro.innerHTML = montarMensagem(e);
-            erro.style.display = 'block';
-        } finally {
+            erro.hidden = false;
             botao.disabled = false;
-            botao.textContent = 'Cadastrar';
+            botao.textContent = 'Criar conta';
         }
     });
 });
@@ -36,20 +51,16 @@ document.addEventListener('DOMContentLoaded', () => {
 function montarMensagem(erro) {
     if (erro.campos && erro.campos.length > 0) {
         const itens = erro.campos
-            .map((campo) => `<li>${rotulo(campo.campo)}: ${campo.mensagem}</li>`)
+            .map((campo) => `<li>${ROTULOS[campo.campo] || campo.campo}: ${campo.mensagem}</li>`)
             .join('');
-        return `<ul class="lista-erros">${itens}</ul>`;
+        return `<ul>${itens}</ul>`;
     }
     return erro.message;
 }
 
-function rotulo(campo) {
-    const rotulos = {
-        nome: 'Nome',
-        email: 'E-mail',
-        senha: 'Senha',
-        telefone: 'Telefone',
-        endereco: 'Endereço'
-    };
-    return rotulos[campo] || campo;
+function decorar() {
+    document.getElementById('voltar').insertAdjacentHTML('afterbegin', UI.icone('voltar', 16));
+    document.getElementById('vantagens').innerHTML = VANTAGENS
+        .map((texto) => `<li>${UI.icone('check', 18)}${texto}</li>`)
+        .join('');
 }
