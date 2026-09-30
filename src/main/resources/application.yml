@@ -1,15 +1,144 @@
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/bdbarbearia?createDatabaseIfNotExist=true
-    username: root
-    password: SENHA_REMOVIDA_DO_HISTORICO
+  application:
+    name: barbeariaconde
+
+  # Perfil padrao: H2 em memoria, para o projeto subir com um comando so, sem instalar
+  # banco. Use --spring.profiles.active=mysql para apontar para o MySQL.
+  profiles:
+    default: h2
 
   jpa:
-    show-sql: true
+    # Desligado de proposito: mapeamento de entidade para DTO acontece na camada de
+    # servico, dentro da transacao. Com open-in-view ligado, uma associacao preguicosa
+    # esquecida vira consulta extra durante a serializacao da resposta.
+    open-in-view: false
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: America/Sao_Paulo
+
+  data:
+    web:
+      pageable:
+        max-page-size: 50
+
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
 
 server:
+  port: 8080
   error:
     include-stacktrace: never
+    include-message: never
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+barbearia:
+  jwt:
+    # Em producao defina BARBEARIA_JWT_SEGREDO (>= 32 bytes). Em branco, a aplicacao
+    # gera um segredo aleatorio no boot e registra um aviso no log.
+    segredo: ${BARBEARIA_JWT_SEGREDO:}
+    emissor: barbearia-conde
+    expiracao-access-token: 15m
+    expiracao-refresh-token: 7d
+    cookie-nome: refreshToken
+    cookie-path: /api/auth
+    cookie-same-site: Strict
+    # true somente sob HTTPS; em http://localhost o navegador descartaria o cookie.
+    cookie-seguro: ${BARBEARIA_COOKIE_SEGURO:false}
+
+  cors:
+    origens-permitidas:
+      - http://localhost:8080
+
+  agenda:
+    fuso-horario: America/Sao_Paulo
+    duracao-slot-minutos: 30
+    antecedencia-minima: 30m
+    antecedencia-minima-cancelamento: 2h
+    janela-maxima-dias: 60
+    max-agendamentos-ativos-por-cliente: 3
+    # Dia ausente = fechado. Segunda-feira nao aparece porque a barbearia nao abre.
+    expediente:
+      TUESDAY:   { abertura: "09:00", fechamento: "19:00", pausa-inicio: "12:00", pausa-fim: "13:00" }
+      WEDNESDAY: { abertura: "09:00", fechamento: "19:00", pausa-inicio: "12:00", pausa-fim: "13:00" }
+      THURSDAY:  { abertura: "09:00", fechamento: "19:00", pausa-inicio: "12:00", pausa-fim: "13:00" }
+      FRIDAY:    { abertura: "09:00", fechamento: "20:00", pausa-inicio: "12:00", pausa-fim: "13:00" }
+      SATURDAY:  { abertura: "08:00", fechamento: "18:00" }
+
+  demo:
+    carregar: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: h2
+  datasource:
+    url: jdbc:h2:mem:barbearia;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  # Console do H2 desligado: a API e stateless e nao vale abrir excecao de seguranca
+  # para uma ferramenta de banco. Para inspecionar os dados localmente, ligue aqui e
+  # libere /h2-console em SecurityConfig.
+  h2:
+    console:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+barbearia:
+  demo:
+    carregar: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: mysql
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:bdbarbearia}?createDatabaseIfNotExist=true&serverTimezone=America/Sao_Paulo
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+barbearia:
+  demo:
+    carregar: ${BARBEARIA_DEMO:true}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      # Em producao o schema nao e alterado pela aplicacao.
+      ddl-auto: validate
+    show-sql: false
+
+barbearia:
+  jwt:
+    cookie-seguro: true
+  demo:
+    carregar: false

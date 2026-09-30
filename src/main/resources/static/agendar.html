@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agendar - Barbearia Conde</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/agenda.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <script src="js/api.js" defer></script>
+    <script src="js/nav.js" defer></script>
+    <script src="js/agendar.js" defer></script>
+</head>
+<body>
+<header>
+    <div id="box">
+        <h1><img src="imgs/logoBarbearia.jpg" alt="Logo da Barbearia Conde"></h1>
+        <nav>
+            <ul data-nav>
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="pagina-agenda">
+    <div id="aviso" class="caixa-aviso" hidden></div>
+
+    <div id="avisoLogin" class="caixa-aviso info" hidden>
+        Você pode conferir os horários livres sem entrar.
+        Para reservar, <a href="login.html">faça login</a> ou
+        <a href="cadastro.html">crie sua conta</a>.
+    </div>
+
+    <section class="etapa">
+        <h2 class="title_main">1. Escolha o serviço</h2>
+        <ul class="products" id="servicos"></ul>
+    </section>
+
+    <section class="etapa">
+        <h2 class="title_main">2. Escolha o dia e o profissional</h2>
+        <div class="filtros-agenda">
+            <label for="data">Data
+                <input type="date" id="data" required>
+            </label>
+            <label for="barbeiro">Profissional
+                <select id="barbeiro">
+                    <option value="">Qualquer profissional disponível</option>
+                </select>
+            </label>
+        </div>
+    </section>
+
+    <section class="etapa">
+        <h2 class="title_main">3. Escolha o horário</h2>
+        <div id="barraReagendamento" class="caixa-aviso info" hidden>
+            <span id="textoReagendamento"></span>
+            <button type="button" id="cancelarReagendamento" class="secundario">Desistir</button>
+        </div>
+        <p class="legenda">Só aparecem horários em que o atendimento inteiro cabe na agenda.</p>
+        <div id="horarios" class="grade-horarios"></div>
+    </section>
+
+    <section class="etapa" id="secaoMeusAgendamentos" hidden>
+        <h2 class="title_main">Meus agendamentos</h2>
+        <div id="agendas"></div>
+    </section>
+</main>
+
+<footer>
+    <img src="imgs/logoBarbearia.jpg" alt="Logo da Barbearia Conde">
+    <p class="copyright">&copy; Tiago Conde Siqueira</p>
+</footer>
+</body>
+</html>

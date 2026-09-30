@@ -2,20 +2,23 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - Barbearia Conde</title>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/login.css">
-    <script src="js/login.js" type="text/javascript" defer></script>
+    <link rel="stylesheet" href="css/agenda.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <script src="js/api.js" defer></script>
+    <script src="js/login.js" defer></script>
 </head>
 <body>
 <header>
     <div id="box">
         <nav>
-            <h1><img src="imgs/logoBarbearia.jpg" alt="logo of Barber Shop"></h1>
+            <h1><img src="imgs/logoBarbearia.jpg" alt="Logo da Barbearia Conde"></h1>
             <ul>
                 <li><a href="index.html">Home</a></li>
+                <li><a href="agendar.html">Agendar</a></li>
             </ul>
         </nav>
     </div>
@@ -24,13 +27,14 @@
 <main>
     <section class="register">
         <h1>Login</h1>
-        <div id="mensagemErro" style="display: none; color: red;"></div>
-        <form id="formLogin" action="/usuarios/login-usuarios" method="post">
-            <label for="nomeUsuario">Nome:</label>
-            <input type="text" id="nomeUsuario" name="nomeUsuario" required>
+        <div id="mensagemErro" class="caixa-aviso erro" style="display: none;"></div>
+        <form id="formLogin" novalidate>
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" autocomplete="email" required>
 
-            <label for="senhaUsuario">Senha:</label>
-            <input type="password" id="senhaUsuario" name="senhaUsuario" required>
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" autocomplete="current-password" required>
+
             <button type="submit">Entrar</button>
             <h3>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></h3>
         </form>
@@ -38,8 +42,7 @@
 </main>
 
 <footer>
-    <p>&copy; 2024 Conde Barbearia. Todos os direitos reservados.</p>
+    <p class="copyright">&copy; 2024 Conde Barbearia. Todos os direitos reservados.</p>
 </footer>
 </body>
 </html>
-

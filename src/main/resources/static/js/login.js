@@ -1,31 +1,44 @@
-document.getElementById('formLogin').addEventListener('submit', function(event) {
-    event.preventDefault();
+document.addEventListener('DOMContentLoaded', () => {
+    const formulario = document.getElementById('formLogin');
+    const erro = document.getElementById('mensagemErro');
+    const botao = formulario.querySelector('button[type="submit"]');
 
-    var formData = {
-        nomeUsuario: document.getElementById('nomeUsuario').value,
-        senhaUsuario: document.getElementById('senhaUsuario').value
-    };
+    // Já autenticado (cookie de refresh válido): não faz sentido mostrar o login.
+    API.restaurarSessao().then((usuario) => {
+        if (usuario) {
+            window.location.replace('agendar.html');
+        }
+    });
 
-    fetch('/usuarios/login-usuarios', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-    })
-        .then(response => {
-            if (response.ok) {
-                window.location.href = '/product.html';
-            } else if (response.status === 401) {
-                throw new Error('Usuário ou senha incorretos');
-            } else {
-                throw new Error('Erro ao fazer login');
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao fazer login:', error);
-            // Exibir mensagem de erro acima do formulário
-            document.getElementById('mensagemErro').textContent = 'Nome ou senha incorretos';
-            document.getElementById('mensagemErro').style.display = 'block';
-        });
+    formulario.addEventListener('submit', async (evento) => {
+        evento.preventDefault();
+        esconder(erro);
+        botao.disabled = true;
+        botao.textContent = 'Entrando...';
+
+        try {
+            await API.login(
+                document.getElementById('email').value.trim(),
+                document.getElementById('senha').value
+            );
+            // O token fica em memória; a navegação seguinte o recupera pelo cookie.
+            window.location.href = API.ehEquipe() ? 'painel.html' : 'agendar.html';
+        } catch (e) {
+            mostrar(erro, e.status === 401
+                ? 'E-mail ou senha incorretos.'
+                : e.message);
+        } finally {
+            botao.disabled = false;
+            botao.textContent = 'Entrar';
+        }
+    });
 });
+
+function mostrar(elemento, mensagem) {
+    elemento.textContent = mensagem;
+    elemento.style.display = 'block';
+}
+
+function esconder(elemento) {
+    elemento.style.display = 'none';
+}

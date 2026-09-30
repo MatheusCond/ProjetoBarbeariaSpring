@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:barbearia_test;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    open-in-view: false
+
+logging:
+  level:
+    root: warn
+    br.com.projetofatec: info
+
+barbearia:
+  jwt:
+    segredo: segredo-de-teste-com-mais-de-32-bytes-para-hmac-512
+    emissor: barbearia-conde-test
+    expiracao-access-token: 15m
+    expiracao-refresh-token: 7d
+    cookie-seguro: false
+
+  demo:
+    carregar: false
+
+  agenda:
+    fuso-horario: America/Sao_Paulo
+    duracao-slot-minutos: 30
+    antecedencia-minima: 30m
+    antecedencia-minima-cancelamento: 2h
+    janela-maxima-dias: 60
+    max-agendamentos-ativos-por-cliente: 3
+    # Terca a sabado, igual a configuracao de producao. Segunda e domingo fechados,
+    # o que os testes usam para checar a rejeicao de dia fechado.
+    expediente:
+      TUESDAY:   { abertura: "09:00", fechamento: "19:00", pausa-inicio: "12:00", pausa-fim: "13:00" }
+      WEDNESDAY: { abertura: "09:00", fechamento: "19:00", pausa-inicio: "12:00", pausa-fim: "13:00" }
+      THURSDAY:  { abertura: "09:00", fechamento: "19:00", pausa-inicio: "12:00", pausa-fim: "13:00" }
+      FRIDAY:    { abertura: "09:00", fechamento: "20:00", pausa-inicio: "12:00", pausa-fim: "13:00" }
+      SATURDAY:  { abertura: "08:00", fechamento: "18:00" }

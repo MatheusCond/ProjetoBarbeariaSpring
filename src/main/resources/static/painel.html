@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Painel da equipe - Barbearia Conde</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/agenda.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <script src="js/api.js" defer></script>
+    <script src="js/nav.js" defer></script>
+    <script src="js/painel.js" defer></script>
+</head>
+<body>
+<header>
+    <div id="box">
+        <h1><img src="imgs/logoBarbearia.jpg" alt="Logo da Barbearia Conde"></h1>
+        <nav>
+            <ul data-nav>
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="pagina-agenda">
+    <h2 class="title_main">Agenda da barbearia</h2>
+
+    <form id="filtros" class="filtros-agenda">
+        <label for="de">De
+            <input type="date" id="de">
+        </label>
+        <label for="ate">Até
+            <input type="date" id="ate">
+        </label>
+        <label for="statusFiltro">Situação
+            <select id="statusFiltro">
+                <option value="">Todas</option>
+                <option value="AGENDADO">Agendado</option>
+                <option value="CONCLUIDO">Concluído</option>
+                <option value="CANCELADO">Cancelado</option>
+                <option value="NAO_COMPARECEU">Não compareceu</option>
+            </select>
+        </label>
+        <label for="barbeiroFiltro">Profissional
+            <select id="barbeiroFiltro"></select>
+        </label>
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <p id="resumo" class="legenda"></p>
+
+    <div class="tabela-rolavel">
+        <table class="tabela-agenda">
+            <thead>
+            <tr>
+                <th>Data</th>
+                <th>Horário</th>
+                <th>Serviço</th>
+                <th>Cliente</th>
+                <th>Profissional</th>
+                <th>Situação</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody id="corpoAgenda"></tbody>
+        </table>
+    </div>
+</main>
+
+<footer>
+    <img src="imgs/logoBarbearia.jpg" alt="Logo da Barbearia Conde">
+    <p class="copyright">&copy; Tiago Conde Siqueira</p>
+</footer>
+</body>
+</html>

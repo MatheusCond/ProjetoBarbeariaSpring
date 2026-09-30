@@ -1,0 +1,357 @@
+/* Estilos das telas de agendamento e do painel da equipe.
+   Segue a paleta do site: vinho #990011 sobre fundo claro. */
+
+.pagina-agenda {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+}
+
+.etapa {
+    margin-bottom: 40px;
+}
+
+.legenda {
+    text-align: center;
+    color: #666;
+    font-size: 0.95em;
+    margin-bottom: 15px;
+}
+
+/* --- Cartões de serviço --------------------------------------------------- */
+
+.card-servico {
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card-servico.selecionado {
+    border-color: #990011;
+    box-shadow: 0 0 0 3px rgba(153, 0, 17, 0.15);
+}
+
+.card-servico.selecionado h2 {
+    color: #990011;
+}
+
+.servico-duracao {
+    color: #666;
+    font-size: 0.95em;
+    margin: 8px 0;
+}
+
+/* --- Filtros -------------------------------------------------------------- */
+
+.filtros-agenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+    justify-content: center;
+    max-width: none;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
+.filtros-agenda label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: bold;
+    width: auto;
+    margin: 0;
+}
+
+.filtros-agenda input,
+.filtros-agenda select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    width: auto;
+    min-width: 200px;
+    margin: 0;
+}
+
+.filtros-agenda button {
+    width: auto;
+    margin: 0;
+    padding: 11px 24px;
+}
+
+/* --- Grade de horários ---------------------------------------------------- */
+
+.grade-horarios {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    gap: 10px;
+}
+
+.slot {
+    padding: 14px 0;
+    font-size: 1.05em;
+    font-weight: bold;
+    color: #990011;
+    background: #fff;
+    border: 2px solid #990011;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.slot:hover:not(:disabled) {
+    background: #990011;
+    color: #fff;
+}
+
+.slot:disabled {
+    opacity: 0.45;
+    cursor: progress;
+}
+
+.grade-horarios .aviso,
+.aviso {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #555;
+    padding: 20px;
+}
+
+.aviso.erro {
+    color: #990011;
+    font-weight: bold;
+}
+
+/* --- Avisos --------------------------------------------------------------- */
+
+.caixa-aviso {
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 5px solid #666;
+    background: #f2f2f2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.caixa-aviso.sucesso {
+    border-color: #2e7d32;
+    background: #e8f5e9;
+}
+
+.caixa-aviso.erro {
+    border-color: #990011;
+    background: #fdecee;
+    font-weight: bold;
+}
+
+.caixa-aviso.info {
+    border-color: #990011;
+    background: #fff6f7;
+}
+
+.caixa-aviso a {
+    color: #990011;
+    font-weight: bold;
+}
+
+.lista-erros {
+    text-align: left;
+    list-style: disc;
+    padding-left: 20px;
+}
+
+/* --- Meus agendamentos ---------------------------------------------------- */
+
+#agendas {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+}
+
+.agenda-item {
+    padding: 18px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-left: 5px solid #990011;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.agenda-item.status-cancelado,
+.agenda-item.status-nao_compareceu {
+    border-left-color: #999;
+    opacity: 0.75;
+}
+
+.agenda-item.status-concluido {
+    border-left-color: #2e7d32;
+}
+
+.agenda-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.agenda-item h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.agenda-item p {
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.etiqueta {
+    font-size: 0.8em;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: #eee;
+    color: #444;
+    white-space: nowrap;
+}
+
+.etiqueta.status-agendado {
+    background: #fdecee;
+    color: #990011;
+}
+
+.etiqueta.status-concluido {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.agenda-acoes {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.agenda-acoes button,
+.tabela-agenda button {
+    width: auto;
+    margin: 0;
+    padding: 8px 16px;
+    font-size: 0.95em;
+    background: #990011;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.agenda-acoes button.secundario,
+.tabela-agenda button.secundario {
+    background: #fff;
+    color: #555;
+    border: 1px solid #bbb;
+}
+
+.agenda-acoes button:hover {
+    background: #77000e;
+}
+
+/* --- Tabela do painel ----------------------------------------------------- */
+
+.tabela-rolavel {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.tabela-agenda {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.tabela-agenda th,
+.tabela-agenda td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.tabela-agenda thead th {
+    background: #333;
+    color: #fff;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.tabela-agenda tbody tr:hover {
+    background: #fafafa;
+}
+
+.tabela-agenda td:last-child {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    border-bottom: none;
+}
+
+.tabela-agenda .erro {
+    color: #990011;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 760px) {
+    .filtros-agenda {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filtros-agenda input,
+    .filtros-agenda select,
+    .filtros-agenda button {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .grade-horarios {
+        grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+    }
+}
+
+/* --- Chamada da home ------------------------------------------------------- */
+
+.chamada-agendamento {
+    text-align: center;
+    padding: 40px 20px;
+    background: #fff6f7;
+    border-top: 3px solid #990011;
+    border-bottom: 3px solid #990011;
+}
+
+.botao-principal {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 14px 32px;
+    background: #990011;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.botao-principal:hover {
+    background: #77000e;
+    color: #fff;
+}
