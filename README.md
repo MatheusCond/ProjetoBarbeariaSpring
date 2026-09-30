@@ -12,13 +12,24 @@ MySQL · JUnit 5 · OpenAPI (Swagger UI) · front em HTML/CSS/JS sem framework.
 ## Rodando o projeto
 
 Basta o JDK 21+. O perfil padrão usa **H2 em memória** e cria contas de demonstração no
-primeiro boot, então não é preciso instalar banco nenhum:
+primeiro boot, então não é preciso instalar banco nenhum nem configurar variável alguma.
+
+A partir da **raiz do projeto** (a pasta onde estão o `pom.xml` e o `mvnw`):
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+No Linux, no macOS ou no Git Bash:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-Depois abra <http://localhost:8080>.
+> No PowerShell use sempre `.\mvnw.cmd`. O arquivo `mvnw` sem extensão é um script de
+> shell, e `./mvnw` resulta em `CommandNotFoundException`.
+
+Depois abra <http://localhost:8080>. Para parar, `Ctrl+C` no terminal.
 
 - Site: <http://localhost:8080/index.html>
 - Tela de agendamento: <http://localhost:8080/agendar.html>
@@ -41,17 +52,21 @@ São credenciais de ambiente local. Em produção o perfil `prod` desliga esse c
 
 ### Com MySQL
 
-```bash
+```powershell
 docker compose up -d
-./mvnw spring-boot:run -Dspring-boot.run.profiles=mysql
+.\mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=mysql"
 ```
+
+> As aspas em torno do `-D` são necessárias no PowerShell: sem elas o argumento é
+> quebrado e o Maven reclama de fase inexistente. No Bash, escreva
+> `./mvnw spring-boot:run -Dspring-boot.run.profiles=mysql`.
 
 Variáveis de conexão e os demais parâmetros estão em [`.env.example`](.env.example).
 
 ### Testes
 
-```bash
-./mvnw test
+```powershell
+.\mvnw.cmd test
 ```
 
 30 testes, incluindo o cenário de concorrência descrito abaixo.
