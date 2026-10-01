@@ -56,6 +56,15 @@ barbearia:
     # true somente sob HTTPS; em http://localhost o navegador descartaria o cookie.
     cookie-seguro: ${BARBEARIA_COOKIE_SEGURO:false}
 
+  # Administrador criado no primeiro boot quando ainda nao existe nenhum.
+  # Os nomes das variaveis estao escritos aqui de proposito: a ligacao automatica do
+  # Spring mapearia barbearia.admin-inicial.email para BARBEARIA_ADMININICIAL_EMAIL,
+  # que e pior de digitar e de documentar.
+  admin-inicial:
+    email: ${BARBEARIA_ADMIN_EMAIL:}
+    senha: ${BARBEARIA_ADMIN_SENHA:}
+    nome: ${BARBEARIA_ADMIN_NOME:Administração}
+
   cors:
     origens-permitidas:
       - http://localhost:8080

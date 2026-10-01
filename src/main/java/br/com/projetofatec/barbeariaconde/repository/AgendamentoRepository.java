@@ -37,6 +37,11 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long>,
 
     long countByClienteIdAndStatus(Long clienteId, StatusAgendamento status);
 
+    /** Atendimentos ainda marcados de um profissional, de uma data em diante. */
+    long countByBarbeiroIdAndStatusAndDataGreaterThanEqual(Long barbeiroId,
+                                                          StatusAgendamento status,
+                                                          LocalDate data);
+
     /**
      * Agendamentos ativos do proprio cliente que se sobrepoem ao intervalo informado,
      * independente do barbeiro. Evita que a mesma pessoa reserve dois atendimentos

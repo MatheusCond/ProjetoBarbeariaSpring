@@ -1,5 +1,6 @@
 package br.com.projetofatec.barbeariaconde;
 
+import br.com.projetofatec.barbeariaconde.config.AdminInicialProperties;
 import br.com.projetofatec.barbeariaconde.config.AgendaProperties;
 import br.com.projetofatec.barbeariaconde.config.JwtProperties;
 import org.springframework.boot.SpringApplication;
@@ -9,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@EnableConfigurationProperties({JwtProperties.class, AgendaProperties.class})
+@EnableConfigurationProperties({JwtProperties.class, AgendaProperties.class, AdminInicialProperties.class})
 public class BarbeariacondeApplication {
 
     public static void main(String[] args) {

@@ -15,5 +15,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     List<Usuario> findByRoleAndAtivoTrueOrderByNomeAsc(Role role);
 
+    /** Inclui os inativos: é a visão que a administração precisa ter. */
+    List<Usuario> findByRoleOrderByNomeAsc(Role role);
+
     Optional<Usuario> findByIdAndRoleAndAtivoTrue(Long id, Role role);
+
+    Optional<Usuario> findByIdAndRole(Long id, Role role);
 }

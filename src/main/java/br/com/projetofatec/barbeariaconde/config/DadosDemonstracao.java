@@ -9,6 +9,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 /**
  * Popula contas de demonstracao para a aplicacao ser utilizavel no primeiro boot.
@@ -24,7 +25,16 @@ public class DadosDemonstracao {
 
     private static final Logger log = LoggerFactory.getLogger(DadosDemonstracao.class);
 
+    /**
+     * Roda antes de {@link AdminInicial}: assim, quando a demonstração está ligada, o
+     * administrador já existe e a criação automática não tem o que fazer. Na ordem
+     * inversa, este carregador veria a base populada e pularia os barbeiros, deixando a
+     * agenda sem ninguém para atender.
+     */
+    static final int ORDEM = 10;
+
     @Bean
+    @Order(DadosDemonstracao.ORDEM)
     ApplicationRunner carregarDadosDemo(UsuarioRepository repository,
                                         UsuarioService usuarioService,
                                         DemoProperties props) {
