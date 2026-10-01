@@ -117,8 +117,10 @@ Um roteiro para ver o sistema funcionando de ponta a ponta:
 ### Contas de demonstração
 
 Criadas automaticamente no primeiro boot quando `barbearia.demo.carregar=true`, que é o
-padrão do perfil H2. Todas usam a senha definida em `barbearia.demo.senha`, no
-`application.yml`.
+padrão do perfil H2. Os e-mails e a senha comum são os valores padrão de
+[`DemoProperties.java`](src/main/java/br/com/projetofatec/barbeariaconde/config/DemoProperties.java),
+e podem ser sobrescritos por `barbearia.demo.*` no `application.yml` ou por variável de
+ambiente.
 
 | Perfil | E-mail | Para quê |
 |---|---|---|
@@ -127,7 +129,11 @@ padrão do perfil H2. Todas usam a senha definida em `barbearia.demo.senha`, no
 | `BARBEIRO` | `rafael@barbeariaconde.com.br` | Idem |
 | `CLIENTE` | `cliente@exemplo.com` | Agendar, remarcar e cancelar o que é seu |
 
-> São credenciais de ambiente local. O perfil `prod` desliga esse carregamento.
+> ⚠️ **Essa senha está no código, e o código é público.** Ela serve só para rodar na sua
+> máquina. Nunca suba uma aplicação acessível pela internet com
+> `barbearia.demo.carregar=true`: qualquer pessoa que leia este repositório entra como
+> administrador. O perfil `prod` já desliga o carregamento; no perfil `mysql`, defina
+> `BARBEARIA_DEMO=false`.
 
 ### Rodar com MySQL
 
