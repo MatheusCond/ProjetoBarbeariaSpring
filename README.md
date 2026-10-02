@@ -886,9 +886,9 @@ estoura a cota. Vale conferir os termos atuais do Render antes de contar com iss
   de alguns minutos sem acesso. Profissional cadastrado, agendamento feito, senha
   trocada: tudo volta ao estado inicial. Para uma vitrine isso até ajuda — quem abrir
   encontra sempre a mesma demonstração limpa —, mas não é um sistema em uso.
-- **Sem o ping, a primeira visita depois da hibernação demora.** O container precisa subir,
-  e a JVM
-  junto: conte algo entre 40 e 60 segundos. Visitas seguintes são instantâneas.
+- **Sem o ping, a primeira visita depois da hibernação demora.** O container precisa
+  subir, e a JVM junto: conte algo entre 40 e 60 segundos. Visitas seguintes são
+  instantâneas.
 - **Qualquer pessoa com a senha entra como administração.** É o ponto da demonstração, e
   é inofensivo enquanto os dados forem descartáveis. Deixa de ser no momento em que
   houver dado real: aí o caminho é o da seção anterior, com `BARBEARIA_DEMO=false` e um
