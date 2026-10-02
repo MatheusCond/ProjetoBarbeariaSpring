@@ -1,0 +1,37 @@
+# Configuracao da hospedagem, lida pelo Render ao criar um Blueprint.
+#
+# Com este arquivo versionado, publicar deixa de ser preencher formulario na mao: o
+# Render le daqui o tipo de servico, o plano, a regiao e quais variaveis precisa pedir.
+# Vale tambem como documentacao — quem abrir o repositorio ve como a aplicacao sobe.
+#
+# Nenhum segredo mora aqui. As variaveis marcadas com `sync: false` sao perguntadas no
+# momento da criacao e ficam guardadas no Render, nunca no Git.
+services:
+  - name: barbearia-conde
+    type: web
+    runtime: docker
+    plan: free
+
+    # Virginia e a regiao gratuita mais proxima do Brasil; Oregon, o padrao, fica na
+    # outra ponta dos Estados Unidos e custa uns 100 ms a mais por requisicao.
+    region: virginia
+
+    dockerfilePath: ./Dockerfile
+
+    # Confere a API, e nao uma pagina estatica: se o Spring nao tiver subido, o servidor
+    # de arquivos ate responderia, e o Render consideraria saudavel uma aplicacao morta.
+    healthCheckPath: /api/servicos
+
+    envVars:
+      # Sob HTTPS o cookie de refresh precisa do atributo Secure, senao o navegador o
+      # envia tambem em conexao sem criptografia.
+      - key: BARBEARIA_COOKIE_SEGURO
+        value: "true"
+
+      # Perguntados na criacao. Sem o segredo do JWT, a aplicacao sorteia um a cada boot
+      # e derruba todas as sessoes; sem trocar a senha de demonstracao, quem ler este
+      # repositorio publico entra como administracao.
+      - key: BARBEARIA_JWT_SEGREDO
+        sync: false
+      - key: BARBEARIA_DEMO_SENHA
+        sync: false

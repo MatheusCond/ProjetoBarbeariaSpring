@@ -861,13 +861,33 @@ funciona na hospedagem: a única diferença é quem define `PORT`.
 | `BARBEARIA_JWT_SEGREDO` | 32+ bytes aleatórios | Sem ele a aplicação sorteia um no boot, e todo restart desloga todo mundo |
 | `BARBEARIA_DEMO_SENHA` | senha sua | **Troque.** O padrão está neste repositório, que é público |
 
+**Publicando no Render.** O [`render.yaml`](render.yaml) na raiz descreve o serviço, então
+não há formulário para preencher: em <https://dashboard.render.com>, use **New → Blueprint**,
+aponte para este repositório, e o Render pergunta apenas os dois valores que não ficam
+versionados — `BARBEARIA_JWT_SEGREDO` e `BARBEARIA_DEMO_SENHA`. Para gerar o segredo:
+
+```bash
+openssl rand -base64 48
+```
+
+**Mantendo o serviço acordado.** O plano gratuito hiberna depois de ~15 minutos sem
+acesso, e a visita seguinte espera a JVM subir. Um serviço gratuito de ping
+(<https://cron-job.org>, por exemplo) acessando a URL a cada 10 minutos resolve, porque
+o serviço nunca fica ocioso tempo suficiente para dormir. Aponte o ping para
+`/api/servicos`, que devolve JSON pequeno em vez da página inteira.
+
+A conta fecha, mas por pouco: o plano gratuito dá 750 horas de instância por mês, e um
+mês de 31 dias tem 744. Dá para manter **um** serviço acordado o tempo todo; um segundo
+estoura a cota. Vale conferir os termos atuais do Render antes de contar com isso.
+
 **O que você está aceitando ao fazer assim:**
 
 - **Os dados somem a cada reinício.** O banco é em memória e o free tier hiberna depois
   de alguns minutos sem acesso. Profissional cadastrado, agendamento feito, senha
   trocada: tudo volta ao estado inicial. Para uma vitrine isso até ajuda — quem abrir
   encontra sempre a mesma demonstração limpa —, mas não é um sistema em uso.
-- **A primeira visita depois da hibernação demora.** O container precisa subir e a JVM
+- **Sem o ping, a primeira visita depois da hibernação demora.** O container precisa subir,
+  e a JVM
   junto: conte algo entre 40 e 60 segundos. Visitas seguintes são instantâneas.
 - **Qualquer pessoa com a senha entra como administração.** É o ponto da demonstração, e
   é inofensivo enquanto os dados forem descartáveis. Deixa de ser no momento em que
