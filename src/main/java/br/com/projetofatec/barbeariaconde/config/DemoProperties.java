@@ -21,4 +21,18 @@ public class DemoProperties {
 
     /** Senha comum das contas de demonstração. Vale apenas para o ambiente local. */
     private String senha = "barbearia123";
+
+    /**
+     * Senha apenas da conta de cliente. Em branco, usa a mesma das demais.
+     *
+     * <p>Existe para a demonstração publicada poder divulgar o acesso de cliente sem
+     * entregar junto o da equipe. Os e-mails de todas as contas estão neste repositório,
+     * que é público: com uma senha só, divulgar a do cliente equivale a dar acesso de
+     * administração a quem ler o código.
+     */
+    private String senhaCliente = "";
+
+    public String senhaDoCliente() {
+        return senhaCliente == null || senhaCliente.isBlank() ? senha : senhaCliente;
+    }
 }

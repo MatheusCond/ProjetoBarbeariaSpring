@@ -1,8 +1,9 @@
 # Barbearia Conde
 
+[![Demonstração ao vivo](https://img.shields.io/badge/demonstração-ao%20vivo-d4a537?style=for-the-badge)](https://barbearia-conde.onrender.com)
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-green)
-![Testes](https://img.shields.io/badge/testes-45%20passando-brightgreen)
+![Testes](https://img.shields.io/badge/testes-48%20passando-brightgreen)
 
 Site e API de uma barbearia real, em Bady Bassitt (SP). O cliente cria conta, vê os
 horários que estão **de fato** livres e reserva o atendimento. Dois clientes não
@@ -11,6 +12,23 @@ mesmo instante.
 
 **Stack:** Java 21 · Spring Boot 3.5 · Spring Security + JWT · Spring Data JPA ·
 H2 / MySQL · JUnit 5 · OpenAPI · front em HTML, CSS e JavaScript sem framework.
+
+### Experimente: <https://barbearia-conde.onrender.com>
+
+Entre com a conta de demonstração abaixo, ou crie a sua em "Cadastre-se" — o cadastro é
+aberto e leva dez segundos.
+
+| E-mail | Senha |
+|---|---|
+| `cliente@exemplo.com` | `visitante2026` |
+
+Com ela você reserva, remarca e cancela atendimentos, e vê a grade de horários recusar o
+que não cabe. O painel da equipe e a administração ficam com a barbearia, por conta das
+senhas, mas aparecem nas seções [5](#5-a-agenda-explicada) e [6](#6-usando-a-api-na-prática).
+A [documentação da API](https://barbearia-conde.onrender.com/swagger-ui.html) está aberta.
+
+> O banco é em memória: tudo volta ao estado inicial quando o serviço reinicia. Pode
+> mexer à vontade.
 
 ---
 
@@ -157,9 +175,16 @@ ambiente.
 
 > ⚠️ **Essa senha está no código, e o código é público.** Ela serve só para rodar na sua
 > máquina. Nunca suba uma aplicação acessível pela internet com
-> `barbearia.demo.carregar=true`: qualquer pessoa que leia este repositório entra como
-> administrador. O perfil `prod` já desliga o carregamento; no perfil `mysql`, defina
-> `BARBEARIA_DEMO=false`.
+> `barbearia.demo.carregar=true` sem trocá-la: qualquer pessoa que leia este repositório
+> entraria como administrador. O perfil `prod` já desliga o carregamento; no perfil
+> `mysql`, defina `BARBEARIA_DEMO=false`.
+
+**Duas senhas, não uma.** `BARBEARIA_DEMO_SENHA` vale para as contas da equipe e
+`BARBEARIA_DEMO_SENHA_CLIENTE`, quando definida, só para a de cliente. A separação
+existe por causa da demonstração publicada: os e-mails de todas as contas estão neste
+repositório, então divulgar uma senha compartilhada entregaria a administração junto com
+o acesso de visitante. É assim que a demonstração no ar publica
+`cliente@exemplo.com` e mantém o painel da equipe fechado.
 
 ### Instalação nova, sem dados de demonstração
 
@@ -206,7 +231,8 @@ estão documentadas em [`.env.example`](.env.example):
 | `BARBEARIA_COOKIE_SEGURO` | `true` quando a aplicação estiver atrás de HTTPS |
 | `DB_HOST` `DB_PORT` `DB_NAME` `DB_USER` `DB_PASSWORD` | Conexão com o MySQL |
 | `BARBEARIA_DEMO` | Criar as contas de demonstração no primeiro boot |
-| `BARBEARIA_DEMO_SENHA` | Troca a senha comum das contas de demonstração (a padrão está no repositório) |
+| `BARBEARIA_DEMO_SENHA` | Troca a senha das contas de demonstração (a padrão está no repositório) |
+| `BARBEARIA_DEMO_SENHA_CLIENTE` | Senha só da conta de cliente, para poder divulgá-la sem abrir a da equipe |
 | `PORT` | Porta em que a aplicação escuta. Hospedagens em container injetam esta variável |
 | `BARBEARIA_ADMIN_EMAIL` `BARBEARIA_ADMIN_SENHA` | Administrador criado no primeiro boot de uma instalação nova |
 
@@ -775,8 +801,9 @@ da barbearia. Tipografia em Oswald para títulos e Inter para texto.
 .\mvnw.cmd test
 ```
 
-São **45 testes**, todos de integração com H2 em memória. Não há mock de repositório: o
-que está sendo verificado é o comportamento real, incluindo as restrições do banco.
+São **48 testes**. Quase todos de integração com H2 em memória: não há mock de
+repositório, o que está sendo verificado é o comportamento real, incluindo as
+restrições do banco.
 
 | Classe | Testes | O que cobre |
 |---|---|---|
@@ -785,6 +812,7 @@ que está sendo verificado é o comportamento real, incluindo as restrições do
 | `AdministracaoDaEquipeTest` | 13 | Cadastro de profissional, ativação, senha provisória, troca da própria senha, quem alcança a administração |
 | `AgendamentoConcorrenciaTest` | 2 | 8 clientes disputando o mesmo horário ao mesmo tempo |
 | `RecursosEstaticosTest` | 2 | Páginas e assets públicos; caminho inexistente responde 404 |
+| `DemoPropertiesTest` | 3 | A senha divulgável do cliente não abre as contas da equipe |
 | `BarbeariacondeApplicationTests` | 1 | O contexto sobe e todos os beans resolvem |
 
 Alguns valem ser lidos como documentação executável:
@@ -860,6 +888,7 @@ funciona na hospedagem: a única diferença é quem define `PORT`.
 | `BARBEARIA_COOKIE_SEGURO` | `true` | Sob HTTPS. Sem isso o cookie de refresh vai sem `Secure` |
 | `BARBEARIA_JWT_SEGREDO` | 32+ bytes aleatórios | Sem ele a aplicação sorteia um no boot, e todo restart desloga todo mundo |
 | `BARBEARIA_DEMO_SENHA` | senha sua | **Troque.** O padrão está neste repositório, que é público |
+| `BARBEARIA_DEMO_SENHA_CLIENTE` | senha divulgável | Opcional. Separa o acesso de visitante do da equipe |
 
 **Publicando no Render.** O [`render.yaml`](render.yaml) na raiz descreve o serviço, então
 não há formulário para preencher: em <https://dashboard.render.com>, use **New → Blueprint**,

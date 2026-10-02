@@ -50,7 +50,7 @@ public class DadosDemonstracao {
                     "(17) 99999-0001", null, Role.BARBEIRO);
             usuarioService.criar("Rafael Souza", props.getEmailBarbeiroDois(), props.getSenha(),
                     "(17) 99999-0002", null, Role.BARBEIRO);
-            usuarioService.criar("Cliente Demo", props.getEmailCliente(), props.getSenha(),
+            usuarioService.criar("Cliente Demo", props.getEmailCliente(), props.senhaDoCliente(),
                     "(17) 98888-1234", "Rua das Flores, 100 - Bady Bassitt", Role.CLIENTE);
 
             log.info("Dados de demonstração criados: 1 admin, 2 barbeiros e 1 cliente. "

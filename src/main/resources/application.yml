@@ -89,6 +89,11 @@ barbearia:
 
   demo:
     carregar: false
+    # Declarada aqui porque a ligacao automatica mapearia senha-cliente para
+    # BARBEARIA_DEMO_SENHACLIENTE. Em branco, a conta de cliente usa a mesma senha da
+    # equipe; preenchida, permite divulgar o acesso de cliente da demonstracao sem
+    # entregar junto o da administracao.
+    senha-cliente: ${BARBEARIA_DEMO_SENHA_CLIENTE:}
 
 ---
 spring:

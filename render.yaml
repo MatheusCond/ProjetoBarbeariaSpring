@@ -35,3 +35,9 @@ services:
         sync: false
       - key: BARBEARIA_DEMO_SENHA
         sync: false
+
+      # Publica de proposito: e a conta que o README divulga para quem quiser
+      # experimentar o agendamento. Fica separada da senha da equipe justamente para
+      # que divulgar esta nao abra a administracao, cujos e-mails estao no codigo.
+      - key: BARBEARIA_DEMO_SENHA_CLIENTE
+        value: "visitante2026"
