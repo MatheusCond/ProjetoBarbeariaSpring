@@ -31,7 +31,10 @@ spring:
       write-dates-as-timestamps: false
 
 server:
-  port: 8080
+  # A porta vem de PORT porque as hospedagens em container injetam essa variavel e
+  # ignoram o valor que a aplicacao escolheria por conta propria: quem nao escuta nela
+  # nao recebe requisicao nenhuma. Sem a variavel, continua 8080 como antes.
+  port: ${PORT:8080}
   error:
     include-stacktrace: never
     include-message: never

@@ -185,6 +185,8 @@ estão documentadas em [`.env.example`](.env.example):
 | `BARBEARIA_COOKIE_SEGURO` | `true` quando a aplicação estiver atrás de HTTPS |
 | `DB_HOST` `DB_PORT` `DB_NAME` `DB_USER` `DB_PASSWORD` | Conexão com o MySQL |
 | `BARBEARIA_DEMO` | Criar as contas de demonstração no primeiro boot |
+| `BARBEARIA_DEMO_SENHA` | Troca a senha comum das contas de demonstração (a padrão está no repositório) |
+| `PORT` | Porta em que a aplicação escuta. Hospedagens em container injetam esta variável |
 | `BARBEARIA_ADMIN_EMAIL` `BARBEARIA_ADMIN_SENHA` | Administrador criado no primeiro boot de uma instalação nova |
 
 Sem `BARBEARIA_JWT_SEGREDO` definido, a aplicação gera um segredo aleatório no boot e
@@ -802,6 +804,54 @@ Alguns valem ser lidos como documentação executável:
 | `mysql` | MySQL | `update` | configurável |
 | `prod` | definido por `DB_URL` | `validate` | não |
 
+### Deploy gratuito, sem banco
+
+A aplicação serve o próprio front-end, então uma instalação é **um container só**: não
+há front separado, origem cruzada nem cookie de terceiro para resolver. E o perfil
+padrão (`h2`) não depende de banco externo — sobe com H2 em memória e cria as contas de
+demonstração no boot.
+
+Isso cabe no plano gratuito de qualquer hospedagem que aceite Docker (Render, Koyeb,
+Fly.io). O [`Dockerfile`](Dockerfile) na raiz faz o build em duas etapas e entrega uma
+imagem só com o JRE e o jar.
+
+**Antes de publicar, prove a imagem na sua máquina** (precisa do Docker instalado):
+
+```powershell
+docker build -t barbearia .
+docker run --rm -p 8080:8080 -e PORT=8080 -e BARBEARIA_DEMO_SENHA=trocaessasenha barbearia
+```
+
+Abra <http://localhost:8080> e entre com a senha que você passou. Se funcionar aqui,
+funciona na hospedagem: a única diferença é quem define `PORT`.
+
+**O que o ambiente precisa ter:**
+
+| Variável | Valor | Por quê |
+|---|---|---|
+| `PORT` | injetada pela hospedagem | A aplicação escuta nela; o padrão 8080 só vale fora de container |
+| `BARBEARIA_COOKIE_SEGURO` | `true` | Sob HTTPS. Sem isso o cookie de refresh vai sem `Secure` |
+| `BARBEARIA_JWT_SEGREDO` | 32+ bytes aleatórios | Sem ele a aplicação sorteia um no boot, e todo restart desloga todo mundo |
+| `BARBEARIA_DEMO_SENHA` | senha sua | **Troque.** O padrão está neste repositório, que é público |
+
+**O que você está aceitando ao fazer assim:**
+
+- **Os dados somem a cada reinício.** O banco é em memória e o free tier hiberna depois
+  de alguns minutos sem acesso. Profissional cadastrado, agendamento feito, senha
+  trocada: tudo volta ao estado inicial. Para uma vitrine isso até ajuda — quem abrir
+  encontra sempre a mesma demonstração limpa —, mas não é um sistema em uso.
+- **A primeira visita depois da hibernação demora.** O container precisa subir e a JVM
+  junto: conte algo entre 40 e 60 segundos. Visitas seguintes são instantâneas.
+- **Qualquer pessoa com a senha entra como administração.** É o ponto da demonstração, e
+  é inofensivo enquanto os dados forem descartáveis. Deixa de ser no momento em que
+  houver dado real: aí o caminho é o da seção anterior, com `BARBEARIA_DEMO=false` e um
+  banco de verdade.
+
+Para dados que persistem seria preciso um banco gerenciado, driver de PostgreSQL no
+`pom.xml` (hoje só há H2 e MySQL) e uma estratégia de schema — o perfil `prod` usa
+`ddl-auto: validate` e não cria tabela nenhuma, então dependeria do Flyway que está em
+"o que faria sentido a seguir".
+
 ---
 
 ## 10. Antes de publicar: checklist de segurança
@@ -812,6 +862,8 @@ Alguns valem ser lidos como documentação executável:
 - [ ] Perfil `prod` ativo: `ddl-auto: validate` e contas de demonstração desligadas.
 - [ ] Credenciais do banco em variável de ambiente, nunca em arquivo versionado.
 - [ ] `barbearia.cors.origens-permitidas` apontando para o domínio real.
+- [ ] Se for a demonstração pública: `BARBEARIA_DEMO_SENHA` definido, porque a senha
+      padrão está neste repositório.
 - [ ] `BARBEARIA_ADMIN_EMAIL` e `BARBEARIA_ADMIN_SENHA` definidos no primeiro boot, e
       a senha trocada em <http://localhost:8080/painel.html> logo depois do primeiro acesso.
 

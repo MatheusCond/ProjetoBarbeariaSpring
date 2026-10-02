@@ -1,0 +1,21 @@
+# O que nao precisa ir para o contexto de build. Sem isto, `target/` inteiro (com o jar
+# de uma compilacao local) sobe junto e deixa o build mais lento sem necessidade.
+
+target/
+.git/
+.gitattributes
+.gitignore
+
+# O build usa a imagem oficial do Maven, nao o wrapper do projeto.
+mvnw
+mvnw.cmd
+.mvn/
+
+# Documentacao e ferramentas de desenvolvimento nao entram na imagem.
+*.md
+.env
+.env.example
+docker-compose.yml
+.idea/
+.vscode/
+*.iml
