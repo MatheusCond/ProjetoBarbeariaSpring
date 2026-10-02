@@ -1,5 +1,6 @@
 package br.com.projetofatec.barbeariaconde.controller;
 
+import br.com.projetofatec.barbeariaconde.dto.auth.AlterarSenhaRequest;
 import br.com.projetofatec.barbeariaconde.dto.auth.LoginRequest;
 import br.com.projetofatec.barbeariaconde.dto.auth.LoginResponse;
 import br.com.projetofatec.barbeariaconde.dto.auth.RegistroRequest;
@@ -76,6 +77,17 @@ public class AuthController {
         return ResponseEntity.noContent()
                 .header(cookieRefresh.nomeDoCabecalho(), cookieRefresh.cabecalhoDeRemocao())
                 .build();
+    }
+
+    @PatchMapping("/senha")
+    @Operation(summary = "Troca a própria senha",
+            description = """
+                    Exige a senha atual, mesmo com a requisição autenticada. As demais sessões
+                    do usuário são encerradas e esta recebe um par de tokens novo, então quem
+                    está trocando a senha não precisa entrar de novo.""")
+    public ResponseEntity<LoginResponse> alterarSenha(@AuthenticationPrincipal Usuario usuario,
+                                                      @RequestBody @Valid AlterarSenhaRequest dto) {
+        return responder(authService.alterarSenha(usuario, dto), HttpStatus.OK);
     }
 
     @GetMapping("/eu")

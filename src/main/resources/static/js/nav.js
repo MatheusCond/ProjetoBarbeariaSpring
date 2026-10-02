@@ -2,7 +2,8 @@
  * Cabeçalho: monta o menu conforme a sessão e cuida do comportamento no mobile.
  *
  * Visitante vê "Entrar" e o botão de agendar. Autenticado vê o próprio nome, o
- * painel (se for da equipe) e "Sair". A sessão é restaurada pelo cookie httpOnly,
+ * painel (se for da equipe), a administração da equipe (se for ADMIN) e "Sair".
+ * A sessão é restaurada pelo cookie httpOnly,
  * então a montagem espera o refresh terminar antes de decidir o que mostrar.
  */
 document.addEventListener('DOMContentLoaded', async () => {
@@ -31,6 +32,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         itens.push({ texto: 'Agendar', href: 'agendar.html' });
         if (API.ehEquipe()) {
             itens.push({ texto: 'Painel', href: 'painel.html' });
+        }
+        if (API.ehAdmin()) {
+            itens.push({ texto: 'Equipe', href: 'admin.html' });
         }
         itens.push({ chip: usuario });
         itens.push({ texto: 'Sair', acao: sair, classe: 'btn btn--contorno btn--p' });

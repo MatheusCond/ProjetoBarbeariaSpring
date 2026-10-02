@@ -129,6 +129,7 @@ const API = (() => {
         estaAutenticado: () => accessToken !== null,
         usuarioAtual: () => usuario,
         ehEquipe: () => !!usuario && (usuario.role === 'BARBEIRO' || usuario.role === 'ADMIN'),
+        ehAdmin: () => !!usuario && usuario.role === 'ADMIN',
 
         /**
          * Recupera a sessão no carregamento da página usando o cookie httpOnly.
@@ -193,6 +194,34 @@ const API = (() => {
         },
 
         concluir: (id) => requisitar(`/api/agendamentos/${id}/concluir`, { metodo: 'PATCH' }),
-        naoCompareceu: (id) => requisitar(`/api/agendamentos/${id}/nao-compareceu`, { metodo: 'PATCH' })
+        naoCompareceu: (id) => requisitar(`/api/agendamentos/${id}/nao-compareceu`, { metodo: 'PATCH' }),
+
+        /*
+         * Administração da equipe (ADMIN). A tela também confere o perfil, mas é só
+         * conveniência: quem manda é o token, e a API responde 403 de qualquer forma.
+         */
+        barbeirosDaAdministracao: () => requisitar('/api/admin/barbeiros'),
+
+        cadastrarBarbeiro: (dados) =>
+            requisitar('/api/admin/barbeiros', { metodo: 'POST', corpo: dados }),
+
+        definirSituacaoDoBarbeiro: (id, ativo) =>
+            requisitar(`/api/admin/barbeiros/${id}/situacao`, { metodo: 'PATCH', corpo: { ativo } }),
+
+        redefinirSenhaDoBarbeiro: (id, novaSenha) =>
+            requisitar(`/api/admin/barbeiros/${id}/senha`, { metodo: 'PATCH', corpo: { novaSenha } }),
+
+        /**
+         * Troca a própria senha. A resposta traz uma sessão nova — as outras são
+         * revogadas no servidor —, então o token em memória precisa ser substituído,
+         * senão a próxima requisição iria com o antigo e levaria 401.
+         */
+        async alterarSenha(senhaAtual, novaSenha) {
+            const sessao = await requisitar('/api/auth/senha', {
+                metodo: 'PATCH',
+                corpo: { senhaAtual, novaSenha }
+            });
+            return guardarSessao(sessao);
+        }
     };
 })();

@@ -53,7 +53,8 @@ pelo banco de dados — não pela boa vontade de quem anotou.
 |---|---|
 | **Visitante** | Ver a barbearia, os serviços com preço e duração, e consultar os horários livres |
 | **Cliente** | Criar conta, reservar, remarcar e cancelar os próprios atendimentos |
-| **Barbeiro / Admin** | Ver a agenda completa com filtros, concluir atendimentos e registrar faltas |
+| **Barbeiro** | Ver a agenda completa com filtros, concluir atendimentos, registrar faltas e trocar a própria senha |
+| **Admin** | Tudo do barbeiro, mais cadastrar profissionais, ativar/desativar e dar senha provisória |
 
 ---
 
@@ -94,6 +95,7 @@ Depois abra <http://localhost:8080>. Para parar, `Ctrl+C` no terminal.
 | <http://localhost:8080> | Site da barbearia |
 | <http://localhost:8080/agendar.html> | Tela de agendamento |
 | <http://localhost:8080/painel.html> | Painel da equipe |
+| <http://localhost:8080/admin.html> | Administração da equipe (só `ADMIN`) |
 | <http://localhost:8080/swagger-ui.html> | Documentação interativa da API |
 
 ### Primeiro uso em 5 minutos
@@ -113,6 +115,9 @@ Um roteiro para ver o sistema funcionando de ponta a ponta:
    porque o atendimento não caberia inteiro ali.
 6. **Entre como a equipe:** saia, entre com a conta de administração (abaixo) e abra o
    painel. Seu agendamento está lá, e você pode concluí-lo ou registrar falta.
+7. **Administre a equipe:** ainda como administração, abra "Equipe" no menu. Cadastre um
+   profissional, desative outro e repare que ele some da lista de quem recebe reserva na
+   tela de agendamento — sem que nada do que já estava marcado seja cancelado.
 
 ### Contas de demonstração
 
@@ -134,6 +139,29 @@ ambiente.
 > `barbearia.demo.carregar=true`: qualquer pessoa que leia este repositório entra como
 > administrador. O perfil `prod` já desliga o carregamento; no perfil `mysql`, defina
 > `BARBEARIA_DEMO=false`.
+
+### Instalação nova, sem dados de demonstração
+
+Com a demonstração desligada o banco sobe vazio, e aí surge o problema do ovo e da
+galinha: só um `ADMIN` cadastra profissionais, e sem profissional ativo a agenda não
+abre. A saída seria um `UPDATE` na mão no banco.
+
+Para evitar isso, defina as duas variáveis antes do **primeiro** boot:
+
+```powershell
+$env:BARBEARIA_ADMIN_EMAIL = "voce@suaempresa.com"
+$env:BARBEARIA_ADMIN_SENHA = "<senha com ao menos 8 caracteres>"
+.\mvnw.cmd spring-boot:run
+```
+
+A conta é criada só quando ainda não existe nenhum administrador ativo — reiniciar a
+aplicação não recria nada nem sobrescreve a senha. Sem as variáveis, o boot segue normal
+e o log traz um aviso em destaque dizendo que ninguém consegue abrir o painel.
+
+Não há senha padrão de propósito: um valor chumbado em código público seria uma porta
+destrancada. Depois de entrar, troque a senha em
+<http://localhost:8080/painel.html> → **Sua conta**, e cadastre a equipe em
+<http://localhost:8080/admin.html>.
 
 ### Rodar com MySQL
 
@@ -157,6 +185,7 @@ estão documentadas em [`.env.example`](.env.example):
 | `BARBEARIA_COOKIE_SEGURO` | `true` quando a aplicação estiver atrás de HTTPS |
 | `DB_HOST` `DB_PORT` `DB_NAME` `DB_USER` `DB_PASSWORD` | Conexão com o MySQL |
 | `BARBEARIA_DEMO` | Criar as contas de demonstração no primeiro boot |
+| `BARBEARIA_ADMIN_EMAIL` `BARBEARIA_ADMIN_SENHA` | Administrador criado no primeiro boot de uma instalação nova |
 
 Sem `BARBEARIA_JWT_SEGREDO` definido, a aplicação gera um segredo aleatório no boot e
 **avisa no log**. Serve para rodar local; em produção significa que todo restart
@@ -196,25 +225,26 @@ Cada camada tem um papel só:
 ```
 src/main/java/br/com/projetofatec/barbeariaconde/
 ├── config/          # SecurityConfig, OpenAPI, CORS, properties, dados de demonstração
-├── controller/      # AuthController, AgendamentosController, CatalogoController
-├── dto/             # records de entrada e saída (auth, agenda, comuns)
+├── controller/      # AuthController, AgendamentosController, CatalogoController, AdminController
+├── dto/             # records de entrada e saída (auth, agenda, admin, comuns)
 ├── exception/       # exceções de negócio e o @RestControllerAdvice
 ├── model/           # Usuario, Agendamento, AgendamentoSlot, RefreshToken, enums
 ├── repository/      # Spring Data + Specifications dos filtros
 ├── security/        # JwtService, filtro JWT, refresh token, cookie, respostas 401/403
-└── service/         # UsuarioService, AuthService, DisponibilidadeService, AgendamentoService
+└── service/         # Usuario, Auth, Disponibilidade, Agendamento, Administração
 
 src/main/resources/static/
 ├── index.html       # landing: hero, serviços, sobre, galeria, contato
 ├── agendar.html     # fluxo de reserva em 3 etapas
-├── painel.html      # agenda da equipe
+├── painel.html      # agenda da equipe e troca da própria senha
+├── admin.html       # cadastro e situação dos profissionais (ADMIN)
 ├── login.html  cadastro.html
 ├── css/app.css      # design system inteiro: tokens, reset e componentes
 └── js/
     ├── api.js       # sessão e chamadas à API
     ├── ui.js        # ícones SVG, formatação e o cartão de serviço
     ├── nav.js       # cabeçalho conforme a sessão + menu mobile
-    └── home.js  agendar.js  painel.js  login.js  cadastro.js
+    └── home.js  agendar.js  painel.js  admin.js  login.js  cadastro.js
 ```
 
 ### Modelo de dados
@@ -640,6 +670,7 @@ curl http://localhost:8080/api/agendamentos/meus
 | `POST` | `/api/auth/logout` | cookie | Revoga o refresh e apaga o cookie |
 | `POST` | `/api/auth/logout-global` | autenticado | Encerra a sessão em todos os dispositivos |
 | `GET` | `/api/auth/eu` | autenticado | Dados do usuário logado |
+| `PATCH` | `/api/auth/senha` | autenticado | Troca a própria senha; encerra as outras sessões |
 | `GET` | `/api/servicos` | público | Catálogo com duração e preço |
 | `GET` | `/api/barbeiros` | público | Profissionais ativos |
 | `GET` | `/api/agendamentos/disponibilidade` | público | Horários livres por data, serviço e profissional |
@@ -651,6 +682,10 @@ curl http://localhost:8080/api/agendamentos/meus
 | `GET` | `/api/agendamentos` | equipe | Agenda completa, com filtros |
 | `PATCH` | `/api/agendamentos/{id}/concluir` | equipe | Marca como realizado |
 | `PATCH` | `/api/agendamentos/{id}/nao-compareceu` | equipe | Registra falta |
+| `GET` | `/api/admin/barbeiros` | admin | Profissionais ativos e inativos, com contato e situação |
+| `POST` | `/api/admin/barbeiros` | admin | Cadastra um profissional com senha inicial |
+| `PATCH` | `/api/admin/barbeiros/{id}/situacao` | admin | Ativa ou desativa |
+| `PATCH` | `/api/admin/barbeiros/{id}/senha` | admin | Senha provisória; encerra as sessões dele |
 
 ### Formato dos erros
 
@@ -676,7 +711,7 @@ Todos os erros usam o mesmo corpo. Quando é validação, vem a lista de campos:
 |---|---|
 | `400` | Campo inválido, data fora do expediente, horário fora da grade |
 | `401` | Sem token, token expirado ou adulterado, senha errada |
-| `403` | Autenticado, mas sem permissão (cliente tentando o painel da equipe) |
+| `403` | Sem permissão (cliente tentando o painel da equipe), ou conta desativada |
 | `404` | Recurso inexistente, ou agendamento de outra pessoa |
 | `409` | Horário ocupado, e-mail já cadastrado, limite de reservas atingido |
 
@@ -711,13 +746,14 @@ da barbearia. Tipografia em Oswald para títulos e Inter para texto.
 .\mvnw.cmd test
 ```
 
-São **32 testes**, todos de integração com H2 em memória. Não há mock de repositório: o
+São **45 testes**, todos de integração com H2 em memória. Não há mock de repositório: o
 que está sendo verificado é o comportamento real, incluindo as restrições do banco.
 
 | Classe | Testes | O que cobre |
 |---|---|---|
 | `AgendamentoRegrasTest` | 16 | Janela de atendimento, sobreposição, limites, cancelar, remarcar, isolamento entre clientes |
 | `AutenticacaoFluxoTest` | 11 | Registro, login, rotas protegidas, token adulterado, rotação e reuso de refresh, logout |
+| `AdministracaoDaEquipeTest` | 13 | Cadastro de profissional, ativação, senha provisória, troca da própria senha, quem alcança a administração |
 | `AgendamentoConcorrenciaTest` | 2 | 8 clientes disputando o mesmo horário ao mesmo tempo |
 | `RecursosEstaticosTest` | 2 | Páginas e assets públicos; caminho inexistente responde 404 |
 | `BarbeariacondeApplicationTests` | 1 | O contexto sobe e todos os beans resolvem |
@@ -731,6 +767,8 @@ Alguns valem ser lidos como documentação executável:
 - `reagendarMoveApenasUm` — garante que remarcar um agendamento não toca nos outros do
   mesmo cliente, que era exatamente o bug do `PUT` antigo.
 - `refreshRotacionaToken` — verifica que reusar um refresh token derruba a sessão toda.
+- `desativarDerrubaAcesso` — desativar um profissional revoga o refresh token dele e
+  invalida o access token ainda não expirado, sem cancelar nada que já estava marcado.
 
 ---
 
@@ -753,6 +791,8 @@ Alguns valem ser lidos como documentação executável:
 | `barbearia.agenda.expediente` | Ter–Sáb | Mapa dia da semana → horários |
 | `barbearia.cors.origens-permitidas` | `localhost:8080` | Origens liberadas se o front for separado |
 | `barbearia.demo.carregar` | `false` | Criar contas de demonstração no primeiro boot |
+| `barbearia.admin-inicial.email` | vazio | Administrador do primeiro boot. Vazio desliga a criação |
+| `barbearia.admin-inicial.senha` | vazio | Senha dele. Sem padrão de propósito; mínimo 8 caracteres |
 
 ### Perfis
 
@@ -772,7 +812,8 @@ Alguns valem ser lidos como documentação executável:
 - [ ] Perfil `prod` ativo: `ddl-auto: validate` e contas de demonstração desligadas.
 - [ ] Credenciais do banco em variável de ambiente, nunca em arquivo versionado.
 - [ ] `barbearia.cors.origens-permitidas` apontando para o domínio real.
-- [ ] Senha da conta de administração trocada.
+- [ ] `BARBEARIA_ADMIN_EMAIL` e `BARBEARIA_ADMIN_SENHA` definidos no primeiro boot, e
+      a senha trocada em <http://localhost:8080/painel.html> logo depois do primeiro acesso.
 
 > **Nunca versione segredo.** Se uma senha já foi para o histórico do Git, trocá-la nos
 > serviços onde é usada é o que resolve — reescrever o histórico depois é limpeza, não
@@ -835,13 +876,23 @@ Com `spring-boot:run` os arquivos são servidos de `target/classes`. Rode
   direto não tem contrato estável entre versões do Spring Data.
 - A restrição `unique` que existia em `Agendas.cliente_email` foi removida: ela permitia
   **um único agendamento por cliente em toda a vida do sistema**.
+- **Desativar, não excluir.** Tirar um profissional da equipe não apaga a conta nem
+  cancela o que já está marcado: ele sai da lista de quem recebe reserva, perde o acesso
+  e as sessões abertas dele são revogadas. O histórico continua apontando para alguém
+  com nome, e a ação é reversível.
+- **Só `isEnabled()` reflete o `ativo` do usuário.** Os outros três sinalizadores de
+  `UserDetails` ficam em `true`, porque a aplicação não tem validade de conta nem
+  bloqueio por tentativas. Quando os quatro devolviam `ativo`, uma conta desativada caía
+  em `LockedException` — conferido antes do desligamento pelo `DaoAuthenticationProvider` —
+  e o tratamento de `DisabledException`, que responde 403 "Esta conta está desativada.",
+  nunca era alcançado: o login recebia um 401 genérico.
 
 ### O que faria sentido a seguir
 
 - Migrações versionadas com Flyway, substituindo o `ddl-auto: update`.
 - Notificação de confirmação e lembrete por e-mail ou WhatsApp.
 - Bloqueio de datas específicas: feriados e férias do profissional.
-- Cadastro de barbeiros e serviços pela interface do administrador.
+- Cadastro de serviços pela interface do administrador (hoje o catálogo é um enum).
 - Rate limiting no login, hoje protegido apenas por mensagem genérica e BCrypt.
 - Verificação de e-mail no cadastro.
 

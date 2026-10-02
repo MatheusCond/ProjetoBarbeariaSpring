@@ -47,6 +47,7 @@
         <div class="hero-acoes" style="margin-top: 0">
             <button type="button" id="hoje" class="btn btn--contorno btn--p">Hoje</button>
             <button type="button" id="semana" class="btn btn--contorno btn--p">Próximos 7 dias</button>
+            <a href="admin.html" id="linkEquipe" class="btn btn--ouro btn--p" hidden>Equipe</a>
         </div>
     </div>
 </div>
@@ -98,6 +99,33 @@
                     <tbody id="corpoAgenda"></tbody>
                 </table>
             </div>
+        </div>
+    </section>
+
+    <section class="secao secao--compacta">
+        <div class="container">
+            <h2 class="titulo-bloco">Sua conta</h2>
+            <p class="ajuda">
+                Troque a senha que você recebeu. As sessões abertas em outros dispositivos
+                são encerradas; esta continua valendo.
+            </p>
+
+            <div id="avisoSenha" class="alerta" hidden></div>
+
+            <form id="trocarSenha" class="barra-filtros barra-filtros--curta"
+                  style="margin-top: var(--e4)">
+                <div class="campo">
+                    <label for="senhaAtual">Senha atual</label>
+                    <input type="password" id="senhaAtual" autocomplete="current-password"
+                           required>
+                </div>
+                <div class="campo">
+                    <label for="novaSenha">Nova senha</label>
+                    <input type="password" id="novaSenha" autocomplete="new-password" required
+                           minlength="8" maxlength="72" placeholder="mínimo 8 caracteres">
+                </div>
+                <button type="submit" class="btn btn--ouro">Trocar senha</button>
+            </form>
         </div>
     </section>
 </main>

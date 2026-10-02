@@ -1,6 +1,6 @@
 /*
- * Painel da equipe: agenda do período, com filtros, conclusão de atendimento e
- * registro de falta.
+ * Painel da equipe: agenda do período, com filtros, conclusão de atendimento,
+ * registro de falta e troca da própria senha.
  *
  * Protegido nas duas pontas — a página redireciona quem não é da equipe e a API
  * responde 403 de qualquer forma, porque o perfil vem do token e não da tela.
@@ -28,8 +28,45 @@ document.addEventListener('sessao-pronta', (evento) => {
     document.getElementById('hoje').addEventListener('click', () => definirPeriodo(0, true));
     document.getElementById('semana').addEventListener('click', () => definirPeriodo(7, true));
 
+    // Cadastro da equipe é só do proprietário; o barbeiro vê a agenda e a própria conta.
+    if (API.ehAdmin()) {
+        document.getElementById('linkEquipe').hidden = false;
+    }
+
+    document.getElementById('trocarSenha').addEventListener('submit', trocarSenha);
+
     carregarBarbeiros().then(carregarAgenda);
 });
+
+/**
+ * Troca da própria senha.
+ *
+ * É o caminho que faltava para a conta de administração criada no primeiro boot a partir
+ * de variável de ambiente: o log pedia a troca depois do primeiro acesso e não havia por
+ * onde fazer. Serve igualmente ao barbeiro que recebeu uma senha provisória.
+ */
+async function trocarSenha(evento) {
+    evento.preventDefault();
+
+    const formulario = evento.target;
+    const botaoEnviar = formulario.querySelector('button[type="submit"]');
+    botaoEnviar.disabled = true;
+
+    try {
+        await API.alterarSenha(
+            document.getElementById('senhaAtual').value,
+            document.getElementById('novaSenha').value);
+
+        formulario.reset();
+        UI.avisar('avisoSenha',
+            'Senha trocada. As sessões abertas em outros dispositivos foram encerradas.',
+            'ok', 8);
+    } catch (e) {
+        UI.avisar('avisoSenha', e.message, 'erro', 8);
+    } finally {
+        botaoEnviar.disabled = false;
+    }
+}
 
 function definirPeriodo(diasAdiante, recarregar = false) {
     const hoje = new Date();

@@ -230,6 +230,18 @@ main {
     color: var(--texto-suave);
 }
 
+/* Título interno de bloco, para páginas que empilham vários assuntos (a agenda e a
+   conta no painel; o cadastro e a lista na administração). Fica alinhado à esquerda,
+   ao contrário de .cabecalho-secao, que é centrado. */
+.titulo-bloco {
+    margin-bottom: var(--e2);
+    font-size: 1.35rem;
+}
+
+.titulo-bloco + .ajuda {
+    max-width: var(--largura-texto);
+}
+
 /* --- Botões --------------------------------------------------------------- */
 
 .btn {
@@ -1140,6 +1152,11 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 .barra-filtros--2 {
     grid-template-columns: repeat(2, 1fr);
+}
+
+/* Dois campos e o botão: formulários curtos como a troca de senha. */
+.barra-filtros--curta {
+    grid-template-columns: repeat(2, 1fr) auto;
 }
 
 /* --- Tabela ----------------------------------------------------------------- */

@@ -43,6 +43,23 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long>,
                                                           LocalDate data);
 
     /**
+     * Atendimentos ainda marcados, agrupados por profissional, em uma consulta so.
+     *
+     * <p>Alimenta a listagem da administracao. Um {@code count} por barbeiro dentro do
+     * laco resolveria o mesmo, mas seria uma consulta por linha da tela.
+     *
+     * @return pares {@code [barbeiroId, quantidade]}; barbeiro sem nenhum nao aparece
+     */
+    @Query("""
+            select a.barbeiro.id, count(a)
+            from Agendamento a
+            where a.status = br.com.projetofatec.barbeariaconde.model.StatusAgendamento.AGENDADO
+              and a.data >= :apartirDe
+            group by a.barbeiro.id
+            """)
+    List<Object[]> contarFuturosPorBarbeiro(@Param("apartirDe") LocalDate apartirDe);
+
+    /**
      * Agendamentos ativos do proprio cliente que se sobrepoem ao intervalo informado,
      * independente do barbeiro. Evita que a mesma pessoa reserve dois atendimentos
      * no mesmo horario com barbeiros diferentes.

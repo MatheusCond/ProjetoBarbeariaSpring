@@ -32,7 +32,8 @@ public class SecurityConfig {
 
     /** Paginas, CSS, JS e imagens do site institucional. */
     private static final String[] RECURSOS_PUBLICOS = {
-            "/", "/index.html", "/login.html", "/cadastro.html", "/agendar.html", "/painel.html",
+            "/", "/index.html", "/login.html", "/cadastro.html", "/agendar.html",
+            "/painel.html", "/admin.html",
             "/css/**", "/js/**", "/imgs/**", "/favicon.ico"
     };
 
@@ -71,6 +72,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/registrar", "/api/auth/login",
                                 "/api/auth/refresh", "/api/auth/logout").permitAll()
                         .requestMatchers(HttpMethod.GET, API_PUBLICA_GET).permitAll()
+                        // Em dobro com o @PreAuthorize do AdminController: um endpoint novo
+                        // que esqueca a anotacao continua barrado pelo caminho.
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().denyAll())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

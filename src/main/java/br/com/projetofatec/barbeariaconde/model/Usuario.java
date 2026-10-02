@@ -93,23 +93,37 @@ public class Usuario implements UserDetails {
         return email;
     }
 
+    /**
+     * Conta desligada pela administracao.
+     *
+     * <p>E o unico dos quatro sinalizadores de {@link UserDetails} que esta aplicacao
+     * tem como responder: nao existe validade de conta nem bloqueio por tentativas.
+     * Os outros tres ficam em {@code true} de proposito.
+     *
+     * <p>Antes todos os quatro devolviam {@code ativo}, e isso tinha um efeito colateral
+     * silencioso: o {@code DaoAuthenticationProvider} confere o bloqueio antes do
+     * desligamento, entao uma conta desativada caia em {@code LockedException} e o
+     * tratamento de {@code DisabledException} — que responde 403 "Esta conta está
+     * desativada." — nunca era alcancado. O login recebia um 401 "Não autenticado."
+     * generico, sem dizer o que de fato havia acontecido.
+     */
+    @Override
+    public boolean isEnabled() {
+        return ativo;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
-        return ativo;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return ativo;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return ativo;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return ativo;
+        return true;
     }
 }

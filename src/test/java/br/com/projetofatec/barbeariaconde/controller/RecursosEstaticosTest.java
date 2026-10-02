@@ -25,9 +25,10 @@ class RecursosEstaticosTest extends BaseDeIntegracao {
     void paginasPublicas() throws Exception {
         for (String caminho : new String[]{
                 "/", "/index.html", "/login.html", "/cadastro.html", "/agendar.html",
-                "/painel.html", "/css/app.css", "/js/api.js", "/js/ui.js", "/js/nav.js",
-                "/js/home.js", "/js/agendar.js", "/js/painel.js", "/js/login.js",
-                "/js/cadastro.js", "/imgs/logo.jpg", "/imgs/on.jpg", "/imgs/cut.jpg",
+                "/painel.html", "/admin.html", "/css/app.css", "/js/api.js", "/js/ui.js",
+                "/js/nav.js", "/js/home.js", "/js/agendar.js", "/js/painel.js",
+                "/js/admin.js", "/js/login.js", "/js/cadastro.js",
+                "/imgs/logo.jpg", "/imgs/on.jpg", "/imgs/cut.jpg",
                 "/imgs/salao.jpg", "/imgs/fachada.jpg"}) {
             mvc.perform(get(caminho)).andExpect(status().isOk());
         }

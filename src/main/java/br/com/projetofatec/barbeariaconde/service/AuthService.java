@@ -1,5 +1,6 @@
 package br.com.projetofatec.barbeariaconde.service;
 
+import br.com.projetofatec.barbeariaconde.dto.auth.AlterarSenhaRequest;
 import br.com.projetofatec.barbeariaconde.dto.auth.LoginRequest;
 import br.com.projetofatec.barbeariaconde.dto.auth.LoginResponse;
 import br.com.projetofatec.barbeariaconde.dto.auth.RegistroRequest;
@@ -89,6 +90,26 @@ public class AuthService {
                 jwtService.segundosDeValidadeDoAccessToken(),
                 UsuarioResponse.de(usuario));
         return new Sessao(corpo, refresh);
+    }
+
+    /**
+     * Troca a senha do usuario autenticado e devolve uma sessao nova.
+     *
+     * <p>Todos os refresh tokens dele sao revogados antes de o substituto ser emitido:
+     * quem tiver copiado a sessao em outro dispositivo cai na hora, e quem esta trocando
+     * a senha continua autenticado nesta aba, sem precisar entrar de novo.
+     *
+     * <p>E o caminho que faltava para a conta criada no primeiro boot a partir de
+     * variavel de ambiente: o log pedia para trocar a senha depois do primeiro acesso, e
+     * nao havia como.
+     */
+    @Transactional
+    public Sessao alterarSenha(Usuario usuario, AlterarSenhaRequest dto) {
+        Usuario atualizado = usuarioService.alterarSenhaPropria(
+                usuario.getId(), dto.senhaAtual(), dto.novaSenha());
+
+        refreshTokenService.revogarTodosDoUsuario(atualizado.getId());
+        return novaSessao(atualizado);
     }
 
     /** Par formado pelo corpo da resposta e pelo refresh token que vai no cookie. */
