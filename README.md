@@ -864,11 +864,22 @@ funciona na hospedagem: a única diferença é quem define `PORT`.
 **Publicando no Render.** O [`render.yaml`](render.yaml) na raiz descreve o serviço, então
 não há formulário para preencher: em <https://dashboard.render.com>, use **New → Blueprint**,
 aponte para este repositório, e o Render pergunta apenas os dois valores que não ficam
-versionados — `BARBEARIA_JWT_SEGREDO` e `BARBEARIA_DEMO_SENHA`. Para gerar o segredo:
+versionados — `BARBEARIA_JWT_SEGREDO` e `BARBEARIA_DEMO_SENHA`. Para gerar o segredo no
+PowerShell:
+
+```powershell
+$bytes = New-Object byte[] 48; (New-Object System.Security.Cryptography.RNGCryptoServiceProvider).GetBytes($bytes); [Convert]::ToBase64String($bytes)
+```
+
+No Linux, no macOS ou no Git Bash:
 
 ```bash
 openssl rand -base64 48
 ```
+
+> `openssl` acompanha o Git para Windows, mas só existe dentro do Git Bash: chamá-lo do
+> PowerShell devolve `CommandNotFoundException`. O comando acima usa o gerador
+> criptográfico do próprio Windows e serve igual.
 
 **Mantendo o serviço acordado.** O plano gratuito hiberna depois de ~15 minutos sem
 acesso, e a visita seguinte espera a JVM subir. Um serviço gratuito de ping
@@ -904,7 +915,7 @@ Para dados que persistem seria preciso um banco gerenciado, driver de PostgreSQL
 ## 10. Antes de publicar: checklist de segurança
 
 - [ ] `BARBEARIA_JWT_SEGREDO` definido, com pelo menos 32 bytes aleatórios
-      (`openssl rand -base64 64`).
+      (veja os comandos na seção de deploy acima).
 - [ ] `BARBEARIA_COOKIE_SEGURO=true` e a aplicação atrás de HTTPS.
 - [ ] Perfil `prod` ativo: `ddl-auto: validate` e contas de demonstração desligadas.
 - [ ] Credenciais do banco em variável de ambiente, nunca em arquivo versionado.
