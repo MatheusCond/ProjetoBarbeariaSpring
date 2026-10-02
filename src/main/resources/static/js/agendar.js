@@ -161,9 +161,14 @@ async function confirmar(hora) {
     const servico = servicoAtual();
     const data = document.getElementById('data').value;
     const barbeiroId = document.getElementById('barbeiro').value || null;
-    const acao = estado.reagendandoId ? 'Remarcar' : 'Confirmar';
 
-    if (!window.confirm(`${acao} ${servico.nome} em ${UI.data(data)} às ${UI.hora(hora)}?`)) {
+    const confirmado = await UI.confirmar({
+        titulo: estado.reagendandoId ? 'Remarcar atendimento' : 'Confirmar agendamento',
+        mensagem: `<strong>${servico.nome}</strong> em <strong>${UI.data(data)}</strong>,`
+            + ` às <strong>${UI.hora(hora)}</strong>.`,
+        confirmar: estado.reagendandoId ? 'Remarcar' : 'Confirmar'
+    });
+    if (!confirmado) {
         return;
     }
 
@@ -274,7 +279,19 @@ function encerrarReagendamento() {
 }
 
 async function cancelarAgendamento(agendamento) {
-    if (!window.confirm(`Cancelar ${agendamento.servicoNome} de ${UI.data(agendamento.data)}?`)) {
+    const confirmado = await UI.confirmar({
+        titulo: 'Cancelar agendamento',
+        mensagem: [
+            `<strong>${agendamento.servicoNome}</strong> em`
+                + ` <strong>${UI.data(agendamento.data)}</strong>,`
+                + ` às <strong>${UI.hora(agendamento.horaInicio)}</strong>.`,
+            'O horário volta para a agenda e fica livre para outra pessoa.'
+        ],
+        confirmar: 'Cancelar atendimento',
+        cancelar: 'Manter',
+        perigo: true
+    });
+    if (!confirmado) {
         return;
     }
     try {

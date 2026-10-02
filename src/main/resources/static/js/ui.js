@@ -67,6 +67,153 @@ const UI = (() => {
         CABELO_E_BARBA: 'combo'
     };
 
+    /*
+     * Diálogo modal, base de UI.confirmar, UI.perguntar e UI.informar.
+     *
+     * Monta um <dialog> novo a cada chamada e o descarta ao fechar: não há estado de um
+     * diálogo sobrando para o seguinte, e a página não carrega marcação de algo que
+     * talvez nunca apareça.
+     *
+     * O <dialog> nativo resolve sozinho a parte chata — camada acima de tudo, foco preso
+     * dentro enquanto estiver aberto e o resto da página inerte.
+     *
+     * Já o fechamento é conduzido aqui, em `finalizar`, e não deixado por conta do evento
+     * `close`. A primeira versão resolvia a promessa dentro desse evento, e isso tinha uma
+     * falha séria: há navegador que fecha o diálogo sem disparar `close` nenhum (o do
+     * painel embutido deste projeto é um deles). Quando isso acontece, a promessa nunca
+     * resolve, quem chamou fica esperando para sempre e a tela trava sem mensagem de erro.
+     * Com cada caminho de saída chamando `finalizar`, o resultado não depende de o
+     * navegador avisar coisa alguma; o ouvinte de `close` fica só como rede, para um
+     * fechamento que não tenha partido daqui.
+     */
+    function abrirDialogo({
+        titulo,
+        mensagem = '',
+        confirmar = 'Confirmar',
+        cancelar = 'Cancelar',
+        perigo = false,
+        campo = null,
+        somenteAviso = false
+    }) {
+        const paragrafos = (Array.isArray(mensagem) ? mensagem : [mensagem])
+            .filter(Boolean)
+            .map((texto) => `<p>${texto}</p>`)
+            .join('');
+
+        const entrada = campo ? `
+            <div class="campo">
+                <label for="dialogoCampo">${campo.rotulo}</label>
+                <input type="${campo.tipo || 'text'}" id="dialogoCampo" autocomplete="off"
+                       placeholder="${campo.dica || ''}">
+            </div>
+            <p class="dialogo-erro" hidden></p>` : '';
+
+        const dialogo = document.createElement('dialog');
+        dialogo.className = 'dialogo';
+
+        // A confirmação vem primeiro no HTML para ser o botão padrão do formulário, e
+        // assim Enter dentro do campo de texto confirmar. Na tela ela aparece à direita,
+        // onde se espera encontrá-la, porque o CSS inverte a ordem visual.
+        dialogo.innerHTML = `
+            <form method="dialog">
+                <div class="dialogo-corpo">
+                    <h2>${titulo}</h2>
+                    ${paragrafos}
+                    ${entrada}
+                </div>
+                <div class="dialogo-acoes">
+                    <button type="submit" value="confirmar" data-acao="confirmar"
+                            class="btn ${perigo ? 'btn--perigo-solido' : 'btn--ouro'}">${confirmar}</button>
+                    ${somenteAviso ? '' : `
+                    <button type="button" data-acao="cancelar"
+                            class="btn btn--contorno">${cancelar}</button>`}
+                </div>
+            </form>`;
+
+        document.body.appendChild(dialogo);
+
+        const entradaDeTexto = dialogo.querySelector('#dialogoCampo');
+        const erro = dialogo.querySelector('.dialogo-erro');
+
+        return new Promise((resolver) => {
+            let encerrado = false;
+
+            function finalizar(confirmado) {
+                if (encerrado) {
+                    return;
+                }
+                encerrado = true;
+
+                const valor = entradaDeTexto ? entradaDeTexto.value : null;
+                if (dialogo.open) {
+                    dialogo.close();
+                }
+                dialogo.remove();
+
+                if (somenteAviso) {
+                    resolver();
+                } else if (campo) {
+                    resolver(confirmado ? valor : null);
+                } else {
+                    resolver(confirmado);
+                }
+            }
+
+            // Sempre barra o envio padrão: quem fecha o diálogo é `finalizar`, para o
+            // caminho ser o mesmo tenha o navegador o comportamento que tiver.
+            dialogo.addEventListener('submit', (evento) => {
+                evento.preventDefault();
+
+                if (campo && campo.validar) {
+                    const problema = campo.validar(entradaDeTexto.value);
+                    if (problema) {
+                        erro.textContent = problema;
+                        erro.hidden = false;
+                        entradaDeTexto.focus();
+                        return;
+                    }
+                }
+                finalizar(true);
+            });
+
+            const botaoCancelar = dialogo.querySelector('[data-acao="cancelar"]');
+            if (botaoCancelar) {
+                botaoCancelar.addEventListener('click', () => finalizar(false));
+            }
+
+            // Esc desiste. O tratamento é nosso, e não o nativo, pelo mesmo motivo do
+            // envio: assim o fechamento e a resposta acontecem juntos, sempre.
+            dialogo.addEventListener('keydown', (evento) => {
+                if (evento.key === 'Escape') {
+                    evento.preventDefault();
+                    finalizar(false);
+                }
+            });
+
+            // Clique no fundo escuro desiste, que é o que se espera de um modal.
+            dialogo.addEventListener('click', (evento) => {
+                if (evento.target === dialogo) {
+                    finalizar(false);
+                }
+            });
+
+            // Rede de segurança: fechamento vindo de fora daqui.
+            dialogo.addEventListener('close', () => finalizar(false));
+
+            dialogo.showModal();
+
+            // Onde o foco começa: no campo quando há um; no cancelar quando a ação
+            // destrói algo, para Enter de reflexo não apagar nada; na confirmação no
+            // resto dos casos, que é o caminho comum.
+            const inicial = entradaDeTexto
+                || dialogo.querySelector(`[data-acao="${perigo ? 'cancelar' : 'confirmar'}"]`);
+            if (inicial) {
+                inicial.focus();
+            }
+        });
+    }
+
+
     return {
         icone: (nome, tamanho) => svg(icones[nome] || '', tamanho),
 
@@ -133,6 +280,37 @@ const UI = (() => {
             caixa.dataset.temporizador = setTimeout(() => (caixa.hidden = true), segundos * 1000);
             return caixa;
         },
+
+
+        /**
+         * Pergunta de sim ou não, no lugar de `confirm()`.
+         *
+         * @param titulo    uma linha, a pergunta em si
+         * @param mensagem  texto ou lista de parágrafos; aceita <strong> para destacar
+         *                  o dado que a pessoa precisa conferir antes de decidir
+         * @param perigo    ação destrutiva: pinta a confirmação de vermelho e deixa o
+         *                  foco no cancelar, para Enter não destruir nada sem querer
+         * @returns Promise<boolean>
+         */
+        confirmar: (opcoes) => abrirDialogo(opcoes),
+
+        /**
+         * Pede um texto, no lugar de `prompt()`.
+         *
+         * @param campo  { rotulo, tipo, dica, validar } — `validar` recebe o valor e
+         *               devolve a mensagem de erro, ou nada se estiver tudo certo
+         * @returns Promise<string|null> — null quando a pessoa desiste
+         */
+        perguntar: (opcoes) => abrirDialogo(opcoes),
+
+        /**
+         * Recado que só precisa ser lido, no lugar de `alert()`. Sem botão de cancelar,
+         * porque não há nada para cancelar.
+         *
+         * @returns Promise<void>
+         */
+        informar: (opcoes) => abrirDialogo(Object.assign({ confirmar: 'Entendi' }, opcoes,
+            { somenteAviso: true })),
 
         estadoVazio: (mensagem, erro = false) =>
             `<p class="estado-vazio${erro ? ' erro' : ''}">${mensagem}</p>`

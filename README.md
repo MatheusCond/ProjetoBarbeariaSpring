@@ -732,6 +732,12 @@ da barbearia. Tipografia em Oswald para títulos e Inter para texto.
   grades de colunas iguais, e o rodapé de cada cartão é empurrado para baixo, de modo
   que todos terminam na mesma linha independentemente do tamanho do texto.
 - **Login e cadastro em split screen**, metade foto e metade formulário.
+- **Diálogos próprios no lugar de `confirm()`, `alert()` e `prompt()`.** Os nativos
+  ignoram o tema, anunciam "localhost:8080 diz" e não aceitam destaque no texto. Os
+  daqui são `<dialog>` modal, que já traz camada superior, foco preso dentro e o resto
+  da página inerte; o fechamento é conduzido no código, e não pelo evento `close`, que
+  nem todo navegador dispara. Confirmar, remarcar, cancelar, desativar profissional e
+  definir senha provisória passam por eles.
 - **Ícones em SVG inline** no lugar dos PNGs: herdam a cor do contexto, escalam sem
   perder nitidez e não custam requisição.
 - **Imagens otimizadas.** As fotos vieram como PNG (uma delas com 4,2 MB); viraram JPEG

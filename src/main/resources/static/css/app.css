@@ -31,6 +31,7 @@
     --ok: #4caf7d;
     --ok-veu: rgba(76, 175, 125, 0.12);
     --erro: #e5484d;
+    --erro-claro: #f0666b;
     --erro-veu: rgba(229, 72, 77, 0.12);
 
     /* Linhas */
@@ -861,6 +862,114 @@ input[type='date']::-webkit-calendar-picker-indicator {
     text-align: left;
 }
 
+/* --- Diálogos -------------------------------------------------------------- */
+
+/* Substituem confirm(), alert() e prompt() do navegador, que ignoram o tema, mostram
+   "localhost:8080 diz" no topo e travam a página inteira enquanto estão abertos.
+   A base é o <dialog> nativo, para herdar de graça o que ele já faz bem: camada
+   superior, fechar com Esc, foco preso dentro e o resto da página inerte. */
+.dialogo {
+    width: min(460px, calc(100vw - var(--e5) * 2));
+
+    /* O navegador centraliza o dialogo modal com margin:auto, mas o reset deste
+       arquivo zera a margem de tudo (`*`) e desfaz isso — sem esta linha ele nasce
+       grudado no canto superior esquerdo. */
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--borda-forte);
+    border-radius: var(--raio-g);
+    background: var(--surface-alta);
+    color: var(--texto);
+    box-shadow: var(--sombra-alta);
+}
+
+.dialogo::backdrop {
+    background: rgba(0, 0, 0, 0.66);
+}
+
+/* O diálogo interrompe o que a pessoa estava fazendo; surgir de uma vez é mais brusco
+   do que o necessário. Fica de fora de quem pediu menos movimento no sistema. */
+@media (prefers-reduced-motion: no-preference) {
+    .dialogo[open] {
+        animation: dialogo-entra 160ms ease-out;
+    }
+
+    .dialogo[open]::backdrop {
+        animation: dialogo-fundo 160ms ease-out;
+    }
+}
+
+@keyframes dialogo-entra {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+}
+
+@keyframes dialogo-fundo {
+    from {
+        opacity: 0;
+    }
+}
+
+.dialogo-corpo {
+    padding: var(--e5);
+}
+
+.dialogo h2 {
+    margin-bottom: var(--e3);
+    font-size: 1.3rem;
+}
+
+.dialogo p {
+    color: var(--texto-suave);
+}
+
+.dialogo p + p {
+    margin-top: var(--e3);
+}
+
+/* O dado que a pessoa precisa conferir antes de decidir: serviço, dia, horário. */
+.dialogo strong {
+    color: var(--texto);
+    font-weight: 500;
+}
+
+.dialogo .campo {
+    margin-top: var(--e4);
+}
+
+.dialogo-erro {
+    margin-top: var(--e3);
+    color: var(--erro);
+    font-size: 0.85rem;
+}
+
+/* row-reverse de propósito: a confirmação vem primeiro no HTML, para ser o botão
+   padrão do formulário (Enter dentro do campo confirma), e aparece à direita, que é
+   onde se espera encontrá-la. */
+.dialogo-acoes {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    gap: var(--e3);
+    padding: var(--e4) var(--e5);
+    border-top: 1px solid var(--borda);
+    background: var(--surface);
+}
+
+/* Ação destrutiva como botão principal: precisa ser lida antes de ser clicada, então
+   não espera o hover para se mostrar vermelha, como faz o .btn--perigo comum. */
+.btn--perigo-solido {
+    background: var(--erro);
+    color: #fff;
+}
+
+.btn--perigo-solido:hover:not(:disabled) {
+    background: var(--erro-claro);
+    color: #fff;
+}
+
 /* --- Página de autenticação ------------------------------------------------ */
 
 /* Split screen: metade imagem, metade formulário. Em telas estreitas a imagem
@@ -1516,6 +1625,17 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 @media (max-width: 720px) {
+    /* Lado a lado os dois botões não cabem: um rótulo honesto como "Cancelar
+       atendimento" estoura a largura e empurra o outro para fora do diálogo.
+       Empilhados, a confirmação fica em cima, porque é a primeira no HTML. */
+    .dialogo-acoes {
+        flex-direction: column;
+    }
+
+    .dialogo-acoes .btn {
+        width: 100%;
+    }
+
     .menu-botao {
         display: grid;
         place-items: center;

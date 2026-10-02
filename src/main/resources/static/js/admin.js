@@ -129,7 +129,7 @@ async function cadastrar(evento) {
  * aviso traz a quantidade antes de confirmar.
  */
 async function alternar(barbeiro, ativo) {
-    if (!ativo && !window.confirm(textoDaDesativacao(barbeiro))) {
+    if (!ativo && !await confirmarDesativacao(barbeiro)) {
         return;
     }
 
@@ -145,15 +145,25 @@ async function alternar(barbeiro, ativo) {
     }
 }
 
-function textoDaDesativacao(barbeiro) {
-    const base = `Desativar ${barbeiro.nome}?\n\n`
-        + 'Ele perde o acesso e sai da lista de quem recebe novas reservas. '
-        + 'Nada é apagado e a ação pode ser desfeita.';
+function confirmarDesativacao(barbeiro) {
+    const paragrafos = [
+        'Ele perde o acesso e sai da lista de quem recebe novas reservas.'
+            + ' Nada é apagado, e a ação pode ser desfeita.'
+    ];
 
-    return barbeiro.agendamentosFuturos > 0
-        ? `${base}\n\nAtenção: ${barbeiro.agendamentosFuturos} atendimento(s) seguem marcados `
-          + 'no nome dele e continuarão na agenda. Remarque ou cancele pelo painel.'
-        : base;
+    if (barbeiro.agendamentosFuturos > 0) {
+        paragrafos.push(`Atenção: <strong>${barbeiro.agendamentosFuturos} atendimento(s)</strong>`
+            + ' seguem marcados no nome dele e continuarão na agenda.'
+            + ' Remarque ou cancele pelo painel.');
+    }
+
+    return UI.confirmar({
+        titulo: `Desativar ${barbeiro.nome}?`,
+        mensagem: paragrafos,
+        confirmar: 'Desativar',
+        cancelar: 'Manter ativo',
+        perigo: true
+    });
 }
 
 function textoDoQueSobra(barbeiro) {
@@ -163,15 +173,22 @@ function textoDoQueSobra(barbeiro) {
 }
 
 async function redefinirSenha(barbeiro) {
-    const nova = window.prompt(
-        `Senha provisória para ${barbeiro.nome} (mínimo ${MINIMO_DA_SENHA} caracteres).\n\n`
-        + 'As sessões abertas dele serão encerradas.');
+    const nova = await UI.perguntar({
+        titulo: `Nova senha para ${barbeiro.nome}`,
+        mensagem: 'As sessões abertas dele serão encerradas, e ele entrará com esta senha'
+            + ' até trocá-la pelo painel.',
+        campo: {
+            rotulo: 'Senha provisória',
+            tipo: 'password',
+            dica: `mínimo ${MINIMO_DA_SENHA} caracteres`,
+            validar: (valor) => valor.length < MINIMO_DA_SENHA
+                ? `A senha precisa ter ao menos ${MINIMO_DA_SENHA} caracteres.`
+                : null
+        },
+        confirmar: 'Redefinir'
+    });
 
     if (nova === null) {
-        return;
-    }
-    if (nova.length < MINIMO_DA_SENHA) {
-        avisar(`A senha precisa ter ao menos ${MINIMO_DA_SENHA} caracteres.`, 'erro');
         return;
     }
 

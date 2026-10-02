@@ -186,6 +186,6 @@ async function executar(acao) {
         await acao();
         await carregarAgenda();
     } catch (e) {
-        window.alert(e.message);
+        await UI.informar({ titulo: 'Não foi possível concluir', mensagem: e.message });
     }
 }
