@@ -939,6 +939,43 @@ Para dados que persistem seria preciso um banco gerenciado, driver de PostgreSQL
 `ddl-auto: validate` e não cria tabela nenhuma, então dependeria do Flyway que está em
 "o que faria sentido a seguir".
 
+### Operando a demonstração que está no ar
+
+Escrito para o eu de daqui a seis meses, quando nada disto estiver mais fresco.
+
+**Atualizar o site é dar push.** O Render acompanha a `main` e reconstrói a cada commit.
+Não existe botão de publicar, e isso tem os dois lados: a demonstração nunca fica
+desatualizada, mas um commit que quebre o build a derruba. Rode os testes antes:
+
+```powershell
+.\mvnw.cmd test
+```
+
+Se algo der errado depois do push, o histórico de builds fica em **Events**, na página do
+serviço, e dá para voltar ao anterior em *Rollback*.
+
+**Zerar os dados é reiniciar.** O banco é H2 em memória, então o estado inteiro — contas
+criadas, agendamentos feitos, profissionais desativados — vive enquanto o processo viver.
+Para devolver a demonstração ao estado original, no Render: **Manual Deploy → Restart
+service**.
+
+Isso importa mais do que parece por causa do ping: *sem* ele, o serviço hibernaria sozinho
+e a demonstração se limparia a cada visita espaçada; *com* ele, o processo não cai nunca,
+e uma demonstração bagunçada continua bagunçada até alguém reiniciar.
+
+**Mudar variáveis.** Ficam na página do serviço, em **Environment**. A senha da equipe
+(`BARBEARIA_DEMO_SENHA`) e o segredo do JWT (`BARBEARIA_JWT_SEGREDO`) só existem ali —
+não estão no repositório e não dá para recuperá-los de outro lugar. Já a senha pública do
+cliente está no [`render.yaml`](render.yaml) e no topo deste README: se trocar, troque nos
+dois lugares, senão o README passa a divulgar uma senha que não funciona.
+
+Mexer em variável reinicia o serviço, o que também zera os dados.
+
+**O ping** vive em serviço separado, fora do Render, e chama `/api/servicos` a cada dez
+minutos. Se um dia a demonstração voltar a demorar quase um minuto para abrir, é o
+primeiro lugar para olhar: ou o agendamento foi desligado, ou está recebendo erro e a
+hibernação voltou.
+
 ---
 
 ## 10. Antes de publicar: checklist de segurança
