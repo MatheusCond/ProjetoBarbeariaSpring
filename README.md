@@ -2,7 +2,7 @@
 
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-green)
-![Testes](https://img.shields.io/badge/testes-32%20passando-brightgreen)
+![Testes](https://img.shields.io/badge/testes-45%20passando-brightgreen)
 
 Site e API de uma barbearia real, em Bady Bassitt (SP). O cliente cria conta, vê os
 horários que estão **de fato** livres e reserva o atendimento. Dois clientes não
@@ -97,6 +97,27 @@ Depois abra <http://localhost:8080>. Para parar, `Ctrl+C` no terminal.
 | <http://localhost:8080/painel.html> | Painel da equipe |
 | <http://localhost:8080/admin.html> | Administração da equipe (só `ADMIN`) |
 | <http://localhost:8080/swagger-ui.html> | Documentação interativa da API |
+
+### Rodar sem o código-fonte
+
+Para mostrar o projeto em outra máquina sem clonar o repositório, gere um executável
+único:
+
+```powershell
+.\mvnw.cmd package
+```
+
+O arquivo sai em `target/barbeariaconde-1.0.0.jar` (cerca de 65 MB) e roda sozinho, sem
+Maven, sem banco e sem internet:
+
+```bash
+java -jar barbeariaconde-1.0.0.jar
+```
+
+O JDK 21 continua sendo necessário na máquina de destino — confira com `java -version`
+antes de contar com isso. Se a porta 8080 estiver ocupada lá, suba em outra com
+`--server.port=9090`. Offline o site funciona inteiro, mas as fontes vêm do Google e
+caem para a padrão do sistema.
 
 ### Primeiro uso em 5 minutos
 
